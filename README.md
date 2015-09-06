@@ -13,11 +13,8 @@
 * [CM3D2.ExternalSaveData.Patcher][]  
 上記が導入済みであること。  
   
-<<<<<<< HEAD
 [![ダウンロードボタン][img_download]][master zip]
 を押してzipファイルをダウンロード。  
-=======
-この画面右の![ダウンロードボタン](http://i.imgur.com/9b8T0ts.png "ダウンロードボタン")を押してzipファイルをダウンロード。  
 >>>>>>> origin/master
 zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&Dすれば導入完了。  
 
@@ -65,10 +62,6 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 * 初版
 
 [CM3D2.MaidVoicePitch.Plugin]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/MaidVoicePitch "neguse11/cm3d2_plugins_okiba/MaidVoicePitch/"
-<<<<<<< HEAD
 [CM3D2.ExternalSaveData.Patcher]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/ExternalSaveData "neguse11/cm3d2_plugins_okiba/ExternalSaveData/"
 [master zip]:https://github.com/CM3D2-01/CM3D2.AddModsSlider.Plugin/archive/master.zip "master zip"
 [img_download]: http://i.imgur.com/byav3Uf.png "ダウンロードボタン"
-=======
-[CM3D2.ExternalSaveData.Patcher]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/ExternalSaveData "neguse11/cm3d2_plugins_okiba/ExternalSaveData/"
->>>>>>> origin/master
