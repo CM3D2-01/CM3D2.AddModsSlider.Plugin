@@ -15,7 +15,6 @@
   
 [![ダウンロードボタン][img_download]][master zip]
 を押してzipファイルをダウンロード。  
->>>>>>> origin/master
 zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&Dすれば導入完了。  
 
 
