@@ -198,7 +198,7 @@ namespace CM3D2.AddModsSlider.Plugin
                 Margin = PropPx(10);
 
                 font["C1"] = 11;
-                 font["C2"] = 12;
+                font["C2"] = 12;
                 font["H1"] = 14;
                 font["H2"] = 16;
                 font["H3"] = 20;
@@ -584,7 +584,7 @@ namespace CM3D2.AddModsSlider.Plugin
                         for (int j=0; j<mp.ValCount(key); j++)
                         {
                             string prop = mp.sPropName[key][j];
-    
+
                             float f = ExSaveData.GetFloat(maid, "CM3D2.MaidVoicePitch", mp.sPropName[key][j], float.NaN);
                             if (!float.IsNaN(f)) mp.fValue[key][prop] = f;
                             else                 mp.fValue[key][prop] = 0f;
@@ -623,11 +623,5 @@ namespace CM3D2.AddModsSlider.Plugin
             }
         }
 
-    //--------
-    
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/master
