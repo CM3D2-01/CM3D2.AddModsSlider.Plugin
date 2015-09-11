@@ -305,7 +305,7 @@ namespace CM3D2.AddModsSlider.Plugin
 
             getExSaveData();
 
-            float winx = (Screen.width - 20) * 0.725f;
+            float winx = (Screen.width - 20) * 0.5f;
             float winy = 250f;
             float winz = 100f;
             float winw = 100f;
