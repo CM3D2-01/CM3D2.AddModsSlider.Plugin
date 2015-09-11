@@ -2,23 +2,32 @@
 
 メイドエディット画面中にF5でGUI表示トグル。  
 [CM3D2.MaidVoicePitch.Plugin][]の各種機能をスライダー・トグルボタンで操作する事が可能。
-![GUI](http://i.imgur.com/sWI5rCG.png  "GUI")  
+![GUI](http://i.imgur.com/l1APIa3.png  "GUI")  
 
 
 ##導入方法
 
-**前提条件**  
+**前提条件** :  
 * UnityInjector
 * [CM3D2.MaidVoicePitch.Plugin][]
 * [CM3D2.ExternalSaveData.Patcher][]  
 上記が導入済みであること。  
   
-[![ダウンロードボタン][img_download]][master zip]
-を押してzipファイルをダウンロード。  
+[![ダウンロードボタン][img_download]][master zip]を押してzipファイルをダウンロード。  
 zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&Dすれば導入完了。  
 
 
 ##更新履歴
+
+####0.1.1.8
+* GUIをUnity旧GUIからNGUIに変更。
+* 各項目のON/OFF操作をトグル系のみに変更。
+* type="scale"のスライダー仕様変更。最小値が1未満の場合は中心が1倍、左側縮小、右側拡大。
+* フリーコメントからの読込機能廃止。
+* MosParam.xmlの書式変更(format="1.2")
+    * modタグに **visible="false"** 記載でその項目は表示されない様に。
+    * valueタグに **visible="false"** 記載でそのvalueのスライダーは表示されない様に。
+    * valueタグに **default="..."** 記載でそのvalueの初期値を設定できる様に。
 
 ####0.1.0.7
 * エディット画面に入ると一部mod数値が初期化されるバグ修正２。
