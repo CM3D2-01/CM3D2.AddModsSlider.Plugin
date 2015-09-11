@@ -29,7 +29,7 @@
     <mod id="EYEBALL"                    : 必須。modの識別名。拡張セーブデータを参照。
          description="..."               : 省略可。規定値は空白。modの説明。
          type="slider"                   : 省略可。規定値は"slider"。"toggle"で<value />タグ不要のトグルボタンに。
-         on_wideslider="false"           : 省略可。規定値は"false"。WIDESLIDER有効が前提のmodに"true"指定。
+         on_wideslider="false"           : 省略可。規定値は"false"。"true"指定するとWIDESLIDER無効時に非表示になる。WIDESLIDER前提のmod用。
          visible="true"                  : 省略可。規定値は"true"。"false"指定でこのmodのスライダーを表示させない。
     >
     
