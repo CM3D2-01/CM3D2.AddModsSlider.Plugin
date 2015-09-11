@@ -62,6 +62,7 @@ namespace CM3D2.AddModsSlider.Plugin
             public Dictionary<string, Dictionary<string, float>>  fValue        = new Dictionary<string, Dictionary<string, float>>();
             public Dictionary<string, Dictionary<string, float>>  fVmin         = new Dictionary<string, Dictionary<string, float>>();
             public Dictionary<string, Dictionary<string, float>>  fVmax         = new Dictionary<string, Dictionary<string, float>>();
+            public Dictionary<string, Dictionary<string, float>>  fVdefault     = new Dictionary<string, Dictionary<string, float>>();
             public Dictionary<string, Dictionary<string, string>> sVType        = new Dictionary<string, Dictionary<string, string>>();
             public Dictionary<string, Dictionary<string, string>> sLabel        = new Dictionary<string, Dictionary<string, string>>();
             public Dictionary<string, Dictionary<string, string>> sMatchPattern = new Dictionary<string, Dictionary<string, string>>();
@@ -139,6 +140,7 @@ namespace CM3D2.AddModsSlider.Plugin
                     fValue[key]        = new Dictionary<string, float>();
                     fVmin[key]         = new Dictionary<string, float>();
                     fVmax[key]         = new Dictionary<string, float>();
+                    fVdefault[key]     = new Dictionary<string, float>();
                     sVType[key]        = new Dictionary<string, string>();
                     sLabel[key]        = new Dictionary<string, string>();
                     sMatchPattern[key] = new Dictionary<string, string>();
@@ -159,6 +161,7 @@ namespace CM3D2.AddModsSlider.Plugin
                         
                         fVmin[key][prop] = Single.TryParse(((XmlElement)valueNode).GetAttribute("min"), out x) ? x : 0f;
                         fVmax[key][prop] = Single.TryParse(((XmlElement)valueNode).GetAttribute("max"), out x) ? x : 0f;
+                        fVdefault[key][prop] = Single.TryParse(((XmlElement)valueNode).GetAttribute("default"), out x) ? x : 0f;
 
                         sVType[key][prop] = ((XmlElement)valueNode).GetAttribute("type");
                         switch (sVType[key][prop])
@@ -571,7 +574,7 @@ namespace CM3D2.AddModsSlider.Plugin
                 if (mp.IsNotBoolKey.Contains(key)) // name=keyにBool以外数値が入ってるmod用
                 {
                     float f = ExSaveData.GetFloat(maid, "CM3D2.MaidVoicePitch", key, float.NaN);
-                    if (float.IsNaN(f)) f = 0f;
+                    if (float.IsNaN(f)) f = mp.fVdefault[key][key + ".value"];
 
                     mp.fValue[key][key + ".value"] = f;
                 }
@@ -587,7 +590,7 @@ namespace CM3D2.AddModsSlider.Plugin
 
                             float f = ExSaveData.GetFloat(maid, "CM3D2.MaidVoicePitch", mp.sPropName[key][j], float.NaN);
                             if (!float.IsNaN(f)) mp.fValue[key][prop] = f;
-                            else                 mp.fValue[key][prop] = 0f;
+                            else mp.fValue[key][prop] = mp.fVdefault[key][prop];
                         }
                     }
                 }
