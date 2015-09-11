@@ -223,10 +223,10 @@ namespace CM3D2.AddModsSlider.Plugin
             {
                 if (!initCompleted && (fPassedTimeOnLevel - fLastInitTime > 1f))
                 { 
+                    fLastInitTime = fPassedTimeOnLevel;
                    	maid =  GameMain.Instance.CharacterMgr.GetMaid(0);
 					if (maid == null) return;
 					initCompleted = initModsSliderNGUI();
-                    fLastInitTime = fPassedTimeOnLevel;
                 }
                 if (!initCompleted) return;
 
