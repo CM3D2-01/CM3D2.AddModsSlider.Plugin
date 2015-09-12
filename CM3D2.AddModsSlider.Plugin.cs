@@ -15,10 +15,10 @@ namespace CM3D2.AddModsSlider.Plugin
     PluginFilter("CM3D2x86"),
     PluginFilter("CM3D2VRx64"),
     PluginName("CM3D2 AddModsSlider"),
-    PluginVersion("0.1.1.9")]
+    PluginVersion("0.1.1.11")]
     public class AddModsSlider : UnityInjector.PluginBase
     {
-        public const string Version = "0.1.1.9";
+        public const string Version = "0.1.1.11";
         public readonly string WinFileName = Directory.GetCurrentDirectory() + @"\UnityInjector\Config\ModsSliderWin.png";
 
         private int sceneLevel;
@@ -31,6 +31,8 @@ namespace CM3D2.AddModsSlider.Plugin
         private Maid maid;
 
         GameObject goAMSPanel;
+        GameObject goScrollView;
+        GameObject goScrollPanelGrid;
         Dictionary<string, UIButton[]> uiOnOffButton = new Dictionary<string, UIButton[]>();
         Dictionary<string, Dictionary<string, UILabel>> uiValueLable = new Dictionary<string, Dictionary<string, UILabel>>();
 
@@ -246,6 +248,8 @@ namespace CM3D2.AddModsSlider.Plugin
             toggleButtonColor(uiOnOffButton[key], mp.bEnabled[key]);
 
             setExSaveData(key);
+            
+            if (key == "WIDESLIDER") toggleActiveUIOnWS(mp.bEnabled[key]);
         }
 
         public void onChangeSlider()
@@ -336,18 +340,20 @@ namespace CM3D2.AddModsSlider.Plugin
             goScrollPanel.name = "ScrollPanel";
             goScrollPanel.SetActive(true);
 
-            UIScrollView uiScrollView = findChild(goScrollPanel, "Scroll View").GetComponent<UIScrollView>();
+            goScrollView = findChild(goScrollPanel, "Scroll View");
+            UIScrollView uiScrollView = goScrollView.GetComponent<UIScrollView>();
 
-            GameObject goScrollPanelGrid = findChild(goScrollPanel, "UIGrid");
+            goScrollPanelGrid = findChild(goScrollPanel, "UIGrid");
             UIGrid uiGrid = goScrollPanelGrid.GetComponent<UIGrid>();
             uiGrid.cellHeight = 100f;
+            uiGrid.sorting = UIGrid.Sorting.Custom;
+            uiGrid.onCustomSort = (Comparison<Transform>)this.sortGridByXMLOrder;
 
             for (int i=0; i<mp.KeyCount; i++)
             {
                 string key = mp.sKey[i];
 
                 if (!mp.bVisible[key]) continue;
-                if (!mp.CheckWS(key))  continue;
 
                 uiOnOffButton[key] = new UIButton[2];
                 uiValueLable[key] = new Dictionary<string, UILabel>();
@@ -405,6 +411,8 @@ namespace CM3D2.AddModsSlider.Plugin
                     EventDelegate.Add(uiOnOffButton[key][1].onClick, new EventDelegate.Callback(this.onClickButton));
 
                     toggleButtonColor(uiOnOffButton[key], mp.bEnabled[key]);
+                    
+                    if (!mp.CheckWS(key)) goModPanel.SetActive(false);
                     continue;
                 }
 
@@ -423,6 +431,7 @@ namespace CM3D2.AddModsSlider.Plugin
                 myLabelS.alignment    = NGUIText.Alignment.Left;
                 myLabelS.multiLine    = true;
                 myLabelS.text         = "■ " +modeDesc;
+                if (!mp.CheckWS(key)) goHeaderLabelS.SetActive(false);
 
                 for (int j=0; j<mp.ValCount(key); j++)
                 {
@@ -459,7 +468,10 @@ namespace CM3D2.AddModsSlider.Plugin
                     modLabel.text  = label;
                     modLabel.width = 350;
                     uiValueLable[key][prop] = findChild(goModSlider,"Value").GetComponent<UILabel>();
+
+                    if (!mp.CheckWS(key)) goModSlider.SetActive(false);
                 }
+ 
             }
             goScrollPanelGrid.GetComponent<UIGrid>().Reposition();
             goAMSPanel.SetActive(false);
@@ -527,11 +539,67 @@ namespace CM3D2.AddModsSlider.Plugin
             }
         }
 
+        public void toggleActiveUIOnWS(bool b)
+        {
+            UIGrid uiGrid = goScrollPanelGrid.GetComponent<UIGrid>();
+            List<Transform> onWSs = new List<Transform>();
+
+            foreach(Transform trans in uiGrid.GetChildList())
+            {
+                string key = trans.name.Split(':')[1];
+                if (mp.bOnWideSlider[key]) onWSs.Add(trans);
+            }
+
+            foreach(Transform trans in onWSs)
+            {
+                string type = trans.name.Split(':')[0];
+                trans.gameObject.SetActive(b);
+                if (b) 
+                {
+                    uiGrid.AddChild(trans);
+                }
+                else
+                {
+                    uiGrid.RemoveChild(trans);
+                }
+            }
+                
+            uiGrid.Reposition();
+            goScrollView.GetComponent<UIScrollView>().UpdateScrollbars();
+        }
+
         private void toggleButtonColor(UIButton[] onoff, bool b)
         {
             Color color = onoff[0].defaultColor;
             onoff[0].defaultColor = new Color(color.r, color.g, color.b,  b ? 1f : 0.5f);
             onoff[1].defaultColor = new Color(color.r, color.g, color.b,  b ? 0.5f : 1f);
+        }
+
+        private int sortGridByXMLOrder(Transform t1, Transform t2)
+        {
+            string type1 = t1.name.Split(':')[0];
+            string type2 = t2.name.Split(':')[0];
+            string key1 = t1.name.Split(':')[1];
+            string key2 = t2.name.Split(':')[1];
+            int n = mp.sKey.IndexOf(key1);
+            int m = mp.sKey.IndexOf(key2);
+            
+            //Debug.Log(t1.name +" comp "+ t2.name);
+
+            Dictionary<string, int> order = new Dictionary<string, int>(){ {"Panel", 0}, {"Header", 1}, {"Slider", 2} };
+            
+            if (n == m) 
+            {
+                if (type1 == "Slider" && type2 == "Slider")
+                {
+                    int l = Array.IndexOf(mp.sPropName[key1], t1.name.Split(':')[2]);
+                    int k = Array.IndexOf(mp.sPropName[key2], t2.name.Split(':')[2]);
+                    
+                    return l - k;
+                }
+                else return order[type1] - order[type2];
+            }
+            else return n - m;
         }
 
     //--------
@@ -647,7 +715,15 @@ namespace CM3D2.AddModsSlider.Plugin
             
             return null;
         }
+        
+
+    //----
+
+        internal static void writeComponent(GameObject go)
+        {
+            Component[] compos = go.GetComponents<Component>();
+            foreach(Component c in compos){ Debug.Log(go.name +":"+ c.GetType().Name); }
+        }
     }
 }
-
 
