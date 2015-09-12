@@ -29,6 +29,7 @@ namespace CM3D2.AddModsSlider.Plugin
         private float fLastInitTime      = 0f;
         private ModsParam mp;
         private Maid maid;
+        private GameObject goMaidVoicePitch;
 
         GameObject goAMSPanel;
         GameObject goScrollView;
@@ -214,6 +215,7 @@ namespace CM3D2.AddModsSlider.Plugin
             {
                 initCompleted = false;
                 xmlLoad = mp.Init();
+                goMaidVoicePitch = GameObject.Find("MaidVoicePitch");
             }
         }
 
@@ -263,6 +265,11 @@ namespace CM3D2.AddModsSlider.Plugin
             mp.fValue[key][prop] = value;
 
             setExSaveData(key, prop);
+
+            if (goMaidVoicePitch != null)
+            {
+                goMaidVoicePitch.SendMessage("UpdateSliders");
+            }
         }
 
     //--------
