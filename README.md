@@ -19,6 +19,9 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 
 ##更新履歴
 
+#####0.1.1.12
+* スライダー操作時に[CM3D2.MaidVoicePitch.Plugin][]側のメソッドを呼び出すように修正。
+
 #####0.1.1.11
 * WIDESLIDER ON/OFF時にWIDESLIDER前提項目の表示/非表示切替がされていなかったのを修正。
 

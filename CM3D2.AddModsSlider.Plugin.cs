@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Linq;
 using UnityEngine;
 using UnityInjector.Attributes;
 using CM3D2.ExternalSaveData.Managed;
@@ -15,10 +16,11 @@ namespace CM3D2.AddModsSlider.Plugin
     PluginFilter("CM3D2x86"),
     PluginFilter("CM3D2VRx64"),
     PluginName("CM3D2 AddModsSlider"),
-    PluginVersion("0.1.1.11")]
+    PluginVersion("0.1.1.12")]
     public class AddModsSlider : UnityInjector.PluginBase
     {
-        public const string Version = "0.1.1.11";
+        public const string Version = "0.1.1.12";
+        public const string PluginName = "AddModsSlider";
         public readonly string WinFileName = Directory.GetCurrentDirectory() + @"\UnityInjector\Config\ModsSliderWin.png";
 
         private int sceneLevel;
@@ -29,13 +31,12 @@ namespace CM3D2.AddModsSlider.Plugin
         private float fLastInitTime      = 0f;
         private ModsParam mp;
         private Maid maid;
-        private GameObject goMaidVoicePitch;
 
-        GameObject goAMSPanel;
-        GameObject goScrollView;
-        GameObject goScrollPanelGrid;
-        Dictionary<string, UIButton[]> uiOnOffButton = new Dictionary<string, UIButton[]>();
-        Dictionary<string, Dictionary<string, UILabel>> uiValueLable = new Dictionary<string, Dictionary<string, UILabel>>();
+        private GameObject goAMSPanel;
+        private GameObject goScrollView;
+        private GameObject goScrollPanelGrid;
+        private Dictionary<string, UIButton[]> uiOnOffButton = new Dictionary<string, UIButton[]>();
+        private Dictionary<string, Dictionary<string, UILabel>> uiValueLable = new Dictionary<string, Dictionary<string, UILabel>>();
 
         private class ModsParam 
         {
@@ -75,7 +76,7 @@ namespace CM3D2.AddModsSlider.Plugin
             {
                 if(!loadModsParamXML()) 
                 {
-                    Debug.LogError("AddModsSlider : loadModsParamXML() failed.");
+                    Debug.LogError(LogStr("loadModsParamXML() failed."));
                     return false;
                 }
                 foreach(string key in sKey) CheckWS(key);
@@ -99,7 +100,7 @@ namespace CM3D2.AddModsSlider.Plugin
             {
                 if (!File.Exists(XmlFileName)) 
                 {
-                    Debug.LogError("AddModsSlider : \"" + XmlFileName + "\" does not exist.");
+                    Debug.LogError(LogStr("\"" + XmlFileName + "\" does not exist."));
                     return false;
                 }
 
@@ -110,14 +111,14 @@ namespace CM3D2.AddModsSlider.Plugin
                  XmlFormat = ((XmlElement)mods).GetAttribute("format");
                 if (XmlFormat != "1.2")
                 {
-                    Debug.LogError("AddModsSlider : "+ AddModsSlider.Version +" requires fomart=\"1.2\" of ModsParam.xml.");
+                    Debug.LogError(LogStr(""+ AddModsSlider.Version +" requires fomart=\"1.2\" of ModsParam.xml."));
                     return false;
                 }
                 
                 XmlNodeList modNodeS = mods.SelectNodes("/mods/mod");
                 if (!(modNodeS.Count > 0)) 
                 {
-                    Debug.LogError("AddModsSlider :  \"" + XmlFileName + "\" has no <mod>elements.");
+                    Debug.LogError(LogStr(" \"" + XmlFileName + "\" has no <mod>elements."));
                     return false;
                 }
 
@@ -215,7 +216,6 @@ namespace CM3D2.AddModsSlider.Plugin
             {
                 initCompleted = false;
                 xmlLoad = mp.Init();
-                goMaidVoicePitch = GameObject.Find("MaidVoicePitch");
             }
         }
 
@@ -228,7 +228,7 @@ namespace CM3D2.AddModsSlider.Plugin
                 if (!initCompleted && (fPassedTimeOnLevel - fLastInitTime > 1f))
                 { 
                     fLastInitTime = fPassedTimeOnLevel;
-                       maid =  GameMain.Instance.CharacterMgr.GetMaid(0);
+                    maid =  GameMain.Instance.CharacterMgr.GetMaid(0);
                     if (maid == null) return;
                     initCompleted = initModsSliderNGUI();
                 }
@@ -266,10 +266,7 @@ namespace CM3D2.AddModsSlider.Plugin
 
             setExSaveData(key, prop);
 
-            if (goMaidVoicePitch != null)
-            {
-                goMaidVoicePitch.SendMessage("UpdateSliders");
-            }
+            this.gameObject.SendMessage("MaidVoicePitch_UpdateSliders");
         }
 
     //--------
@@ -282,7 +279,7 @@ namespace CM3D2.AddModsSlider.Plugin
             GameObject goButtonOff = findChild(goSysUIRoot, "Off");
             if (!goButtonOn || !goButtonOff) 
             {
-                Debug.LogError("On or Off Button is not found.");
+                Debug.LogError(LogStr("On or Off Button is not found."));
                 BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
                 return false;
             }
@@ -291,7 +288,7 @@ namespace CM3D2.AddModsSlider.Plugin
             UnityEngine.Object prefabSlider = Resources.Load("SceneEdit/MainMenu/Prefab/Slider");
             if (!prefabSlider) 
             {
-                Debug.LogError("Prefab/Slider is not found.");
+                Debug.LogError(LogStr("Prefab/Slider is not found."));
                 return false;
             }
 
@@ -302,7 +299,7 @@ namespace CM3D2.AddModsSlider.Plugin
             UnityEngine.Object.Destroy(goProfileLabelUnit);
             if (!font) 
             {
-                Debug.LogError("trueTypeFont is not found.");
+                Debug.LogError(LogStr("trueTypeFont is not found."));
                 return false;
             }
 
@@ -310,7 +307,7 @@ namespace CM3D2.AddModsSlider.Plugin
             GameObject goHeader = findChild(goUIRoot, "CategoryTitle");
             if (!goHeader) 
             {
-                Debug.LogError("CategoryTitle is not found.");
+                Debug.LogError(LogStr("CategoryTitle is not found."));
                 return false;
             }
 
@@ -692,7 +689,7 @@ namespace CM3D2.AddModsSlider.Plugin
         {
             if (!File.Exists(path)) 
             {
-                Debug.LogError("AddModsSlider : \"" + path + "\" does not exist.");
+                Debug.LogError(LogStr("\"" + path + "\" does not exist."));
                 return null;
             }
 
@@ -726,10 +723,15 @@ namespace CM3D2.AddModsSlider.Plugin
 
     //----
 
-        internal static void writeComponent(GameObject go)
+        internal static void WriteComponent(GameObject go)
         {
             Component[] compos = go.GetComponents<Component>();
             foreach(Component c in compos){ Debug.Log(go.name +":"+ c.GetType().Name); }
+        }
+
+        internal static string LogStr(string s)
+        {
+            return AddModsSlider.PluginName +" : "+ s;
         }
     }
 }
