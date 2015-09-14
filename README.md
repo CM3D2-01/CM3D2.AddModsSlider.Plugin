@@ -19,6 +19,10 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 
 ##更新履歴
 
+#####0.1.1.13
+* MosParam.xmlのmodタグtype属性に"toggle,slider"指定でOn/Offボタン付きスライダーを表示する様に。
+* GUIのサイズ・位置調整。
+
 #####0.1.1.12
 * スライダー操作時に[CM3D2.MaidVoicePitch.Plugin][]側のメソッドを呼び出すように修正。
 
