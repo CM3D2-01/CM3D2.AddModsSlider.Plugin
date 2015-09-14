@@ -20,7 +20,7 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 ##更新履歴
 
 #####0.1.1.13
-* MosParam.xmlのmodタグtype属性に"toggle,slider"指定でOn/Offボタン付きスライダーを表示する様に。
+* ModsParam.xmlのmodタグtype属性に"toggle,slider"指定でOn/Offボタン付きスライダーを表示する様に。
 * GUIのサイズ・位置調整。
 
 #####0.1.1.12
@@ -40,7 +40,7 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 * 各項目のON/OFF操作をトグル系のみに変更。
 * type="scale"のスライダー仕様変更。最小値が1未満の場合は中心が1倍、左側縮小、右側拡大。
 * フリーコメントからの読込機能廃止。
-* MosParam.xmlの書式変更(format="1.2")
+* ModsParam.xmlの書式変更(format="1.2")
     * modタグに **visible="false"** 記載でその項目は表示されない様に。
     * valueタグに **visible="false"** 記載でそのvalueのスライダーは表示されない様に。
     * valueタグに **default="..."** 記載でそのvalueの初期値を設定できる様に。
@@ -66,7 +66,7 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 * 夜伽時に興奮・精神・理性を変更できるスライドバーを追加。  
 * 夜伽時にFaceBlend（頬・涙・よだれの組合せ）とFaceAnime（エロ○○系表情）を選べるボタンを追加。
 
-####0.0.2.3
+#####0.0.2.3
 * フォントサイズがウィンドウ幅と比例する様に。
 * スクロールバーが滑らかに。
 * ModsParam.xmlの<mod>属性 forced="..." が正常に機能していなかったのを修正。
