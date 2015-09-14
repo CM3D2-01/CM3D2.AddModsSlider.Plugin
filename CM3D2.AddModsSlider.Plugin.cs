@@ -16,10 +16,10 @@ namespace CM3D2.AddModsSlider.Plugin
     PluginFilter("CM3D2x86"),
     PluginFilter("CM3D2VRx64"),
     PluginName("CM3D2 AddModsSlider"),
-    PluginVersion("0.1.1.13")]
+    PluginVersion("0.1.1.14")]
     public class AddModsSlider : UnityInjector.PluginBase
     {
-        public const string Version = "0.1.1.13";
+        public const string Version = "0.1.1.14";
         public const string PluginName = "AddModsSlider";
         public readonly string WinFileName = Directory.GetCurrentDirectory() + @"\UnityInjector\Config\ModsSliderWin.png";
 
@@ -35,6 +35,8 @@ namespace CM3D2.AddModsSlider.Plugin
         private GameObject goAMSPanel;
         private GameObject goScrollView;
         private GameObject goScrollPanelGrid;
+        private GameObject goButtonOnStock;
+        private GameObject goButtonOffStock;
         private Dictionary<string, UIButton[]> uiOnOffButton = new Dictionary<string, UIButton[]>();
         private Dictionary<string, Dictionary<string, UILabel>> uiValueLable = new Dictionary<string, Dictionary<string, UILabel>>();
 
@@ -221,6 +223,7 @@ namespace CM3D2.AddModsSlider.Plugin
             sceneLevel = level;
             visible = false;
             fPassedTimeOnLevel = 0f;
+            fLastInitTime = 0f;
             
             if (sceneLevel == 5)
             {
@@ -287,16 +290,36 @@ namespace CM3D2.AddModsSlider.Plugin
 
         private bool initModsSliderNGUI()
         {
-            GameObject goSysUIRoot = GameObject.Find("__GameMain__/SystemUI Root");
-            BaseMgr<ConfigMgr>.Instance.OpenConfigPanel();
-            GameObject goButtonOn  = FindChild(goSysUIRoot, "On");
-            GameObject goButtonOff = FindChild(goSysUIRoot, "Off");
-            if (!goButtonOn || !goButtonOff) 
+            if (!goButtonOnStock || !goButtonOffStock)
             {
-                Debug.LogError(LogStr("On or Off Button is not found."));
-                BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
-                return false;
+                GameObject goSysUIRoot = GameObject.Find("__GameMain__/SystemUI Root");
+                BaseMgr<ConfigMgr>.Instance.OpenConfigPanel();
+                GameObject goButtonOn  = FindChild(goSysUIRoot, "On");
+                GameObject goButtonOff = FindChild(goSysUIRoot, "Off");
+                
+                this.goButtonOnStock  = UnityEngine.Object.Instantiate(goButtonOn)  as GameObject;
+                this.goButtonOffStock = UnityEngine.Object.Instantiate(goButtonOff) as GameObject;
+                if (!goButtonOnStock || !goButtonOffStock) 
+                {
+                    Debug.LogError(LogStr("On or Off Button is not found."));
+                    BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
+                    return false;
+                }
+                else
+                {
+                    this.goButtonOnStock.name  = "goButtonOnStock";
+                    this.goButtonOffStock.name = "goButtonOffStock";
+                    EventDelegate.Remove(this.goButtonOnStock.GetComponentsInChildren<UIButton>(true)[0].onClick, 
+                                        new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysEnabled));
+                    EventDelegate.Remove(this.goButtonOffStock.GetComponentsInChildren<UIButton>(true)[0].onClick,
+                                        new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysDisabled));
+                    this.goButtonOnStock.SetActive(false);
+                    this.goButtonOffStock.SetActive(false);
+                    UnityEngine.Object.DontDestroyOnLoad(this.goButtonOnStock);
+                    UnityEngine.Object.DontDestroyOnLoad(this.goButtonOffStock);
+                }
             }
+            
             BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
 
             UnityEngine.Object prefabSlider = Resources.Load("SceneEdit/MainMenu/Prefab/Slider");
@@ -388,6 +411,7 @@ namespace CM3D2.AddModsSlider.Plugin
             uiTable.keepWithinPanel = true;
             uiTable.enabled = true;*/
             
+try{
             for (int i = 0; i < mp.KeyCount; i++)
             {
                 string key = mp.sKey[i];
@@ -420,25 +444,25 @@ namespace CM3D2.AddModsSlider.Plugin
                 {
                     goHeaderLabel.transform.localPosition = new Vector3(0f, 50f, 0f);
 
-                    GameObject goButtonModOn = UnityEngine.Object.Instantiate(goButtonOn) as GameObject;
+                    GameObject goButtonModOn = UnityEngine.Object.Instantiate(goButtonOnStock) as GameObject;
                     SetChild(goModPanel, goButtonModOn);
                     goButtonModOn.transform.localPosition = new Vector3(-100f, 0f, 0f);
                     goButtonModOn.transform.localScale    = new Vector3(0.8f, 0.8f, 1f);
                     goButtonModOn.name = "ButtonOn:" + key;
                     goButtonModOn.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                    goButtonModOn.SetActive(true);
 
-                    GameObject goButtonModOff = UnityEngine.Object.Instantiate(goButtonOff) as GameObject;
+                    GameObject goButtonModOff = UnityEngine.Object.Instantiate(goButtonOffStock) as GameObject;
                     SetChild(goModPanel, goButtonModOff);
                     goButtonModOff.transform.localPosition = new Vector3(100f, 0f, 0f);
                     goButtonModOff.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
                     goButtonModOff.name = "ButtonOff:" + key;
                     goButtonModOff.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                    goButtonModOff.SetActive(true);
 
                     uiOnOffButton[key][0] = goButtonModOn.GetComponentsInChildren<UIButton>(true)[0];
                     uiOnOffButton[key][1] = goButtonModOff.GetComponentsInChildren<UIButton>(true)[0];
 
-                    EventDelegate.Remove(uiOnOffButton[key][0].onClick, new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysEnabled));
-                    EventDelegate.Remove(uiOnOffButton[key][1].onClick, new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysDisabled));
                     EventDelegate.Add(uiOnOffButton[key][0].onClick, new EventDelegate.Callback(this.onClickButton));
                     EventDelegate.Add(uiOnOffButton[key][1].onClick, new EventDelegate.Callback(this.onClickButton));
 
@@ -487,6 +511,7 @@ namespace CM3D2.AddModsSlider.Plugin
                     }
                 }
             }
+} catch(Exception ex) { Debug.Log(LogStr("initModsSliderNGUI() for-loop "+ ex)); }
 
             uiGrid.Reposition();
             goScrollView.GetComponent<UIScrollView>().UpdateScrollbars();
@@ -557,6 +582,7 @@ namespace CM3D2.AddModsSlider.Plugin
 
         public void toggleActiveUIOnToggle(string key)
         {
+try{
             bool b = mp.bEnabled[key];
             UIGrid uiGrid = goScrollPanelGrid.GetComponent<UIGrid>();
             List<Transform> onToggles = new List<Transform>();
@@ -586,6 +612,7 @@ namespace CM3D2.AddModsSlider.Plugin
                 
             uiGrid.Reposition();
             goScrollView.GetComponent<UIScrollView>().UpdateScrollbars();
+} catch(Exception ex) { Debug.Log(LogStr("toggleActiveUIOnToggle() "+ ex));  }
         }
 
         private void toggleButtonColor(UIButton[] onoff, bool b)
@@ -597,6 +624,7 @@ namespace CM3D2.AddModsSlider.Plugin
 
         private int sortGridByXMLOrder(Transform t1, Transform t2)
         {
+try{
             string type1 = t1.name.Split(':')[0];
             string type2 = t2.name.Split(':')[0];
             string key1 = t1.name.Split(':')[1];
@@ -620,6 +648,8 @@ namespace CM3D2.AddModsSlider.Plugin
                 else return order[type1] - order[type2];
             }
             else return n - m;
+
+} catch(Exception ex) { Debug.Log(LogStr("sortGridByXMLOrder() "+ ex)); return 0; }
         }
 
     //--------
