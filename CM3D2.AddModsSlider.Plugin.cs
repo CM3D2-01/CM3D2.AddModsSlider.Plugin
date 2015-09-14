@@ -35,8 +35,6 @@ namespace CM3D2.AddModsSlider.Plugin
         private GameObject goAMSPanel;
         private GameObject goScrollView;
         private GameObject goScrollPanelGrid;
-        private GameObject goButtonOnStock;
-        private GameObject goButtonOffStock;
         private Dictionary<string, UIButton[]> uiOnOffButton = new Dictionary<string, UIButton[]>();
         private Dictionary<string, Dictionary<string, UILabel>> uiValueLable = new Dictionary<string, Dictionary<string, UILabel>>();
 
@@ -290,37 +288,42 @@ namespace CM3D2.AddModsSlider.Plugin
 
         private bool initModsSliderNGUI()
         {
-            if (!goButtonOnStock || !goButtonOffStock)
+            GameObject goSysUIRoot = GameObject.Find("__GameMain__/SystemUI Root");
+            if (!goSysUIRoot)
             {
-                GameObject goSysUIRoot = GameObject.Find("__GameMain__/SystemUI Root");
-                BaseMgr<ConfigMgr>.Instance.OpenConfigPanel();
-                GameObject goButtonOn  = FindChild(goSysUIRoot, "On");
-                GameObject goButtonOff = FindChild(goSysUIRoot, "Off");
-                
-                this.goButtonOnStock  = UnityEngine.Object.Instantiate(goButtonOn)  as GameObject;
-                this.goButtonOffStock = UnityEngine.Object.Instantiate(goButtonOff) as GameObject;
-                if (!goButtonOnStock || !goButtonOffStock) 
+                Debug.LogError(LogStr("SystemUI Root is not found."));
+                return false;
+            }
+
+            GameObject goButtonOn  = FindChild(goSysUIRoot, "On");
+            GameObject goButtonOff = FindChild(goSysUIRoot, "Off");
+            GameObject goButtonOnStock  = null;
+            GameObject goButtonOffStock = null;
+            if (!goButtonOn || !goButtonOff) 
+            {
+                Debug.LogError(LogStr("goButtonOn/Off is not found."));
+                return false;
+            }
+            else
+            {
+                goButtonOnStock  = UnityEngine.Object.Instantiate(goButtonOn)  as GameObject;
+                goButtonOffStock = UnityEngine.Object.Instantiate(goButtonOff) as GameObject;
+                goButtonOnStock.name  = "goButtonOnStock";
+                goButtonOffStock.name = "goButtonOffStock";
+                if (!goButtonOnStock.GetComponentsInChildren<UIButton>(true)[0] || !goButtonOnStock.GetComponentsInChildren<UIButton>(true)[0])
                 {
-                    Debug.LogError(LogStr("On or Off Button is not found."));
-                    BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
+                    Debug.LogError(LogStr("UIButton is not found."));
                     return false;
                 }
-                else
-                {
-                    this.goButtonOnStock.name  = "goButtonOnStock";
-                    this.goButtonOffStock.name = "goButtonOffStock";
-                    EventDelegate.Remove(this.goButtonOnStock.GetComponentsInChildren<UIButton>(true)[0].onClick, 
-                                        new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysEnabled));
-                    EventDelegate.Remove(this.goButtonOffStock.GetComponentsInChildren<UIButton>(true)[0].onClick,
-                                        new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysDisabled));
-                    this.goButtonOnStock.SetActive(false);
-                    this.goButtonOffStock.SetActive(false);
-                    UnityEngine.Object.DontDestroyOnLoad(this.goButtonOnStock);
-                    UnityEngine.Object.DontDestroyOnLoad(this.goButtonOffStock);
-                }
+
+                EventDelegate.Remove(goButtonOnStock.GetComponentsInChildren<UIButton>(true)[0].onClick, 
+                                    new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysEnabled));
+                EventDelegate.Remove(goButtonOffStock.GetComponentsInChildren<UIButton>(true)[0].onClick,
+                                    new EventDelegate.Callback(BaseMgr<ConfigMgr>.Instance.OnSysButtonShowAlwaysDisabled));
+                goButtonOnStock.SetActive(false);
+                goButtonOffStock.SetActive(false);
             }
             
-            BaseMgr<ConfigMgr>.Instance.CloseConfigPanel();
 
             UnityEngine.Object prefabSlider = Resources.Load("SceneEdit/MainMenu/Prefab/Slider");
             if (!prefabSlider) 
@@ -349,6 +352,13 @@ namespace CM3D2.AddModsSlider.Plugin
             if (!goHeader) 
             {
                 Debug.LogError(LogStr("CategoryTitle is not found."));
+                return false;
+            }
+
+            GameObject goScrollPanelSlider = goUIRoot.transform.Find("ScrollPanel-Slider").gameObject;
+            if (!goScrollPanelSlider) 
+            {
+                Debug.LogError(LogStr("ScrollPanel-Slider is not found."));
                 return false;
             }
 
@@ -384,7 +394,6 @@ namespace CM3D2.AddModsSlider.Plugin
             myTexture.autoResizeBoxCollider = true;
             myTexture.MakePixelPerfect();
 
-            GameObject goScrollPanelSlider = goUIRoot.transform.Find("ScrollPanel-Slider").gameObject;
             GameObject goScrollPanel =  UnityEngine.Object.Instantiate(goScrollPanelSlider) as GameObject;
             SetChild(goAMSPanel, goScrollPanel);
             goScrollPanel.transform.localPosition = new Vector3(scrlx, scrly, 1f);
