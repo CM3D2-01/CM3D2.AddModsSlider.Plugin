@@ -19,6 +19,10 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 
 ##更新履歴
 
+#####0.1.1.16
+* On/Off付きスライダーの表示/非表示切替が適切に動作してなかったバグ修正。
+* On/Offボタン押下時に[CM3D2.MaidVoicePitch.Plugin][]側のメソッドが呼ばれてなかったバグ修正。
+
 #####0.1.1.15
 * イニシャライズ時にコンフィグパネル開閉動作をしない様に修正。
 
@@ -42,7 +46,7 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 #####0.1.1.9
 * イニシャライズ失敗時にコンフィグパネル連打しないように修正。
 
-####0.1.1.8
+###0.1.1.8
 * GUIをUnity旧GUIからNGUIに変更。
 * 各項目のON/OFF操作をトグル系のみに変更。
 * type="scale"のスライダー仕様変更。最小値が1未満の場合は中心が1倍、左側縮小、右側拡大。
@@ -62,14 +66,14 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 * 拡張セーブ時にアクティブメイド以外が保存できないバグ修正。
 * エディット画面に入るとmod数値が初期化されるバグ修正。
 
-####0.1.0.5
+###0.1.0.5
 * CM3D2.ExternalSaveData.Patcherの拡張セーブデータに対応。
 * 上記に伴い ModsParam.xml の書式変更。
 * ON/OFF系のmodをUIよりトグルボタンで操作可能に。
 * UIをドラッグで動かせる様に。
 * 夜伽スライダーを別Pluginに分離。
 
-####0.0.3.4
+###0.0.3.4
 * 夜伽時に興奮・精神・理性を変更できるスライドバーを追加。  
 * 夜伽時にFaceBlend（頬・涙・よだれの組合せ）とFaceAnime（エロ○○系表情）を選べるボタンを追加。
 
@@ -79,17 +83,17 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 * ModsParam.xmlの<mod>属性 forced="..." が正常に機能していなかったのを修正。
 * リフレクションがフレーム毎に実行されてたのを修正。（軽量化）
 
-####0.0.2.2
+###0.0.2.2
 * ModsParam.xmlの書式を変更。
 * ModsParam.xmlで<mod>の属性に forced="true" 指定で、フリーコメント欄にかかわらずそのmodのスライダーが表示される様に。
 * <value>の属性でtype="scale"指定の時、最小値をスライダーに反映してなかったのを修正。
 
-####0.0.1.1
+###0.0.1.1
 * 各mod定義をxmlファイルにして読み込む様に。
 * スライダーバーとフリーコメント欄が連動する様に。（改造スレその２>>192）
 * EYEBALL,TEST_EYE_ANGの縦横が逆だったのを修正。
 
-####0.0.0.0
+###0.0.0.0
 * 初版
 
 [CM3D2.MaidVoicePitch.Plugin]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/MaidVoicePitch "neguse11/cm3d2_plugins_okiba/MaidVoicePitch/"
