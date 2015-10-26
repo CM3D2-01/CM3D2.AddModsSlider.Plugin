@@ -5,6 +5,7 @@
 ![GUI](http://i.imgur.com/l1APIa3.png  "GUI")  
 
 
+
 ##導入方法
 
 **前提条件** :  
@@ -15,6 +16,7 @@
   
 [![ダウンロードボタン][img_download]][master zip]を押してzipファイルをダウンロード。  
 zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&Dすれば導入完了。  
+
 
 
 ##更新履歴
@@ -95,6 +97,16 @@ zipファイルの中にあるUnityInjectorフォルダをCM3D2フォルダにD&
 
 ###0.0.0.0
 * 初版
+
+
+
+##注意書き
+
+個人で楽しむ為の非公式Modです。  
+転載・再配布・改変・改変物配布等はKISSに迷惑のかからぬ様、  
+各自の判断・責任の下で行って下さい。  
+
+
 
 [CM3D2.MaidVoicePitch.Plugin]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/MaidVoicePitch "neguse11/cm3d2_plugins_okiba/MaidVoicePitch/"
 [CM3D2.ExternalSaveData.Patcher]: https://github.com/neguse11/cm3d2_plugins_okiba/tree/master/ExternalSaveData "neguse11/cm3d2_plugins_okiba/ExternalSaveData/"
