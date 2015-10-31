@@ -224,13 +224,13 @@ namespace CM3D2.AddModsSlider.Plugin
                         fVdef[key][prop] = Single.TryParse(((XmlElement)valueNode).GetAttribute("default"), out x) ? x : Single.NaN;
                         if (Single.IsNaN(fVdef[key][prop]))
                         {
-							switch (sVType[key][prop])
-                        	{
-	                            case "num":   fVdef[key][prop] = 0f; break;
-	                            case "scale": fVdef[key][prop] = 1f; break;
-    	                        case "int" :  fVdef[key][prop] = 0f; break;
-        	                    default :  fVdef[key][prop] = 0f; break;
-                        	}
+                            switch (sVType[key][prop])
+                            {
+                                case "num":   fVdef[key][prop] = 0f; break;
+                                case "scale": fVdef[key][prop] = 1f; break;
+                                case "int" :  fVdef[key][prop] = 0f; break;
+                                default :  fVdef[key][prop] = 0f; break;
+                            }
                         }
 
                         fValue[key][prop] = fVdef[key][prop];
@@ -256,16 +256,16 @@ namespace CM3D2.AddModsSlider.Plugin
 
         public void OnLevelWasLoaded(int level)
         {
-	        if (level == 9) 
-	        {
-				font = GameObject.Find("SystemUI Root").GetComponentsInChildren<UILabel>()[0].trueTypeFont;
-			}
+            if (level == 9) 
+            {
+                font = GameObject.Find("SystemUI Root").GetComponentsInChildren<UILabel>()[0].trueTypeFont;
+            }
 
             if (level != sceneLevel && sceneLevel == 5) finalize();
 
             if (level == 5)
             {
-	            mp = new ModsParam();
+                mp = new ModsParam();
                 if (xmlLoad = mp.Init())  StartCoroutine( initCoroutine() );
             }
             
@@ -282,7 +282,7 @@ namespace CM3D2.AddModsSlider.Plugin
                     //WriteTrans("UI Root");
                 }
                 
-        	}
+            }
         }
 
         #endregion
@@ -295,92 +295,92 @@ namespace CM3D2.AddModsSlider.Plugin
         {
           try{
             string key = getTag(UIButton.current, 1);
-			bool b = false;
+            bool b = false;
 
-			if (mp.IsToggle(key))
-			{
-				b = !mp.bEnabled[key];
-				mp.bEnabled[key] = b;
-	            setExSaveData(key);
+            if (mp.IsToggle(key))
+            {
+                b = !mp.bEnabled[key];
+                mp.bEnabled[key] = b;
+                setExSaveData(key);
 
-	            notifyMaidVoicePitchOnChange();
+                notifyMaidVoicePitchOnChange();
 
-	            // WIDESLIDER有効化/無効化に合わせて、依存項目UIを表示/非表示
-	            if (key == "WIDESLIDER")  toggleActiveOnWideSlider();
-	        }
-			
-			if (mp.IsSlider(key))
-			{
-				if (!mp.IsToggle(key)) b = !(UIButton.current.defaultColor.a == 1f);
-				setSliderVisible(key, b);
-			}
+                // WIDESLIDER有効化/無効化に合わせて、依存項目UIを表示/非表示
+                if (key == "WIDESLIDER")  toggleActiveOnWideSlider();
+            }
+            
+            if (mp.IsSlider(key))
+            {
+                if (!mp.IsToggle(key)) b = !(UIButton.current.defaultColor.a == 1f);
+                setSliderVisible(key, b);
+            }
 
             setButtonColor(UIButton.current, b);
 
           } catch(Exception ex) { Debug.Log(LogLabel +"OnClickToggleHeader() "+ ex); return; }
-		}
+        }
 
         public void OnClickUndoAll()
         {
           try{
-			foreach (string key in mp.sKey)
-			{
-				if (mp.IsToggle(key))
-				{
-					mp.bEnabled[key] = (undoValue[key]["enable"] == 1f);
-		            setExSaveData(key);
-		            notifyMaidVoicePitchOnChange();
-				    setButtonColor(key, mp.bEnabled[key]);
-				}
+            foreach (string key in mp.sKey)
+            {
+                if (mp.IsToggle(key))
+                {
+                    mp.bEnabled[key] = (undoValue[key]["enable"] == 1f);
+                    setExSaveData(key);
+                    notifyMaidVoicePitchOnChange();
+                    setButtonColor(key, mp.bEnabled[key]);
+                }
 
-				if (mp.IsSlider(key))
-				{
-					undoSliderValue(key);
-					
-					if (mp.IsToggle(key))
-					{
-						setSliderVisible(key, mp.bEnabled[key]);
-					}
-				}
-			}
+                if (mp.IsSlider(key))
+                {
+                    undoSliderValue(key);
+                    
+                    if (mp.IsToggle(key))
+                    {
+                        setSliderVisible(key, mp.bEnabled[key]);
+                    }
+                }
+            }
           } catch(Exception ex) { Debug.Log(LogLabel +"OnClickUndoAll() "+ ex); return; }
-		}
+        }
 
         public void OnClickUndoButton()
         {
-			undoSliderValue(getTag(UIButton.current, 1));
-		}
+            undoSliderValue(getTag(UIButton.current, 1));
+        }
 
         public void OnClickResetAll()
         {
           try{
-			foreach (string key in mp.sKey)
-			{
-				if (mp.IsToggle(key))
-				{
-					mp.bEnabled[key] = false;
-		            setExSaveData(key);
-		            notifyMaidVoicePitchOnChange();
-				    setButtonColor(key, mp.bEnabled[key]);
-				}
+            foreach (string key in mp.sKey)
+            {
+                if (mp.IsToggle(key))
+                {
+                    mp.bEnabled[key] = false;
+                    setExSaveData(key);
+                    notifyMaidVoicePitchOnChange();
+                    setButtonColor(key, mp.bEnabled[key]);
+                }
 
-				if (mp.IsSlider(key))
-				{
-					resetSliderValue(key);
-					
-					if (mp.IsToggle(key))
-					{
-						setSliderVisible(key, mp.bEnabled[key]);
-					}
-				}
-			}
+                if (mp.IsSlider(key))
+                {
+                    resetSliderValue(key);
+                    
+                    if (mp.IsToggle(key))
+                    {
+                        setSliderVisible(key, mp.bEnabled[key]);
+                    }
+                }
+            }
           } catch(Exception ex) { Debug.Log(LogLabel +"OnClickResetAll() "+ ex); return; }
-		}
+        }
 
         public void OnClickResetButton()
         {
-			resetSliderValue(getTag(UIButton.current, 1));
-		}
+            resetSliderValue(getTag(UIButton.current, 1));
+        }
 
         public void OnChangeSlider()
         {
@@ -397,31 +397,31 @@ namespace CM3D2.AddModsSlider.Plugin
 
             notifyMaidVoicePitchOnChange();
 
- 			//Debug.Log(key +":"+ prop +":"+ value);
+             //Debug.Log(key +":"+ prop +":"+ value);
          } catch(Exception ex) { Debug.Log(LogLabel +"OnChangeSlider() "+ ex); return; }
         }
 
         public void OnSubmitSliderValueInput()
-		{
+        {
           try{
-			string key  = getTag(UIInput.current, 1);
+            string key  = getTag(UIInput.current, 1);
             string prop = getTag(UIInput.current, 2);
             UISlider slider = null;
 
             foreach (Transform t in  UIInput.current.transform.parent.parent)
             {
-				if(getTag(t, 0) == "Slider") slider = t.GetComponent<UISlider>();
-			}
+                if(getTag(t, 0) == "Slider") slider = t.GetComponent<UISlider>();
+            }
 
             float value;
-	        if ( Single.TryParse(UIInput.current.value, out value) ) 
-	        {
-				mp.fValue[key][prop] = value;
-				slider.value = codecSliderValue(key, prop);
-				UIInput.current.value = codecSliderValue(key, prop, slider.value).ToString("F2");
-			}
+            if ( Single.TryParse(UIInput.current.value, out value) ) 
+            {
+                mp.fValue[key][prop] = value;
+                slider.value = codecSliderValue(key, prop);
+                UIInput.current.value = codecSliderValue(key, prop, slider.value).ToString("F2");
+            }
           } catch(Exception ex) { Debug.Log(LogLabel +"OnSubmitSliderValueInput() "+ ex); return; }
-		}
+        }
 
         #endregion
 
@@ -440,139 +440,139 @@ namespace CM3D2.AddModsSlider.Plugin
           try{
 
             maid = GameMain.Instance.CharacterMgr.GetMaid(0);
-			if (maid == null) return false;
+            if (maid == null) return false;
 
-			UIAtlas uiAtlasSceneEdit = FindAtlas("AtlasSceneEdit");
-			UIAtlas uiAtlasDialog    = FindAtlas("SystemDialog");
+            UIAtlas uiAtlasSceneEdit = FindAtlas("AtlasSceneEdit");
+            UIAtlas uiAtlasDialog    = FindAtlas("SystemDialog");
 
             GameObject goUIRoot = GameObject.Find("UI Root");
             GameObject cameraObject    = GameObject.Find("/UI Root/Camera");
             Camera     cameraComponent = cameraObject.GetComponent<Camera>();
             uiCamara = cameraObject.GetComponent<UICamera>();
 
-			#region createSlider
+            #region createSlider
 
-			// スライダー作成
-			GameObject goTestSliderUnit = new GameObject("TestSliderUnit");
-			SetChild(goUIRoot, goTestSliderUnit);
-			{
-				UISprite uiTestSliderUnitFrame = goTestSliderUnit.AddComponent<UISprite>();
-				uiTestSliderUnitFrame.atlas      = uiAtlasSceneEdit;
-				uiTestSliderUnitFrame.spriteName = "cm3d2_edit_slidertitleframe";
-				uiTestSliderUnitFrame.type       = UIBasicSprite.Type.Sliced;
-				uiTestSliderUnitFrame.SetDimensions(500, 50);
+            // スライダー作成
+            GameObject goTestSliderUnit = new GameObject("TestSliderUnit");
+            SetChild(goUIRoot, goTestSliderUnit);
+            {
+                UISprite uiTestSliderUnitFrame = goTestSliderUnit.AddComponent<UISprite>();
+                uiTestSliderUnitFrame.atlas      = uiAtlasSceneEdit;
+                uiTestSliderUnitFrame.spriteName = "cm3d2_edit_slidertitleframe";
+                uiTestSliderUnitFrame.type       = UIBasicSprite.Type.Sliced;
+                uiTestSliderUnitFrame.SetDimensions(500, 50);
 
-				// スライダー作成
-				UISlider uiTestSlider = NGUITools.AddChild<UISlider>(goTestSliderUnit);
-				UISprite uiTestSliderRail = uiTestSlider.gameObject.AddComponent<UISprite>();
-				uiTestSliderRail.name       = "Slider";
-				uiTestSliderRail.atlas      = uiAtlasSceneEdit;
-				uiTestSliderRail.spriteName = "cm3d2_edit_slideberrail";
-				uiTestSliderRail.type       = UIBasicSprite.Type.Sliced;
-				uiTestSliderRail.SetDimensions(250, 5);
+                // スライダー作成
+                UISlider uiTestSlider = NGUITools.AddChild<UISlider>(goTestSliderUnit);
+                UISprite uiTestSliderRail = uiTestSlider.gameObject.AddComponent<UISprite>();
+                uiTestSliderRail.name       = "Slider";
+                uiTestSliderRail.atlas      = uiAtlasSceneEdit;
+                uiTestSliderRail.spriteName = "cm3d2_edit_slideberrail";
+                uiTestSliderRail.type       = UIBasicSprite.Type.Sliced;
+                uiTestSliderRail.SetDimensions(250, 5);
 
-				UIWidget uiTestSliderBar = NGUITools.AddChild<UIWidget>(uiTestSlider.gameObject);
-				uiTestSliderBar.name  = "DummyBar";
-				uiTestSliderBar.width = uiTestSliderRail.width;
+                UIWidget uiTestSliderBar = NGUITools.AddChild<UIWidget>(uiTestSlider.gameObject);
+                uiTestSliderBar.name  = "DummyBar";
+                uiTestSliderBar.width = uiTestSliderRail.width;
 
-				UISprite uiTestSliderThumb = NGUITools.AddChild<UISprite>(uiTestSlider.gameObject);
-				uiTestSliderThumb.name       = "Thumb";
-				uiTestSliderThumb.depth      = uiTestSliderRail.depth + 1;
-				uiTestSliderThumb.atlas      = uiAtlasSceneEdit;
-				uiTestSliderThumb.spriteName = "cm3d2_edit_slidercursor";
-				uiTestSliderThumb.type       = UIBasicSprite.Type.Sliced;
-				uiTestSliderThumb.SetDimensions(25, 25);
-				uiTestSliderThumb.gameObject.AddComponent<BoxCollider>();
+                UISprite uiTestSliderThumb = NGUITools.AddChild<UISprite>(uiTestSlider.gameObject);
+                uiTestSliderThumb.name       = "Thumb";
+                uiTestSliderThumb.depth      = uiTestSliderRail.depth + 1;
+                uiTestSliderThumb.atlas      = uiAtlasSceneEdit;
+                uiTestSliderThumb.spriteName = "cm3d2_edit_slidercursor";
+                uiTestSliderThumb.type       = UIBasicSprite.Type.Sliced;
+                uiTestSliderThumb.SetDimensions(25, 25);
+                uiTestSliderThumb.gameObject.AddComponent<BoxCollider>();
 
-				uiTestSlider.backgroundWidget = uiTestSliderRail;
-				uiTestSlider.foregroundWidget = uiTestSliderBar;
-				uiTestSlider.thumb            = uiTestSliderThumb.gameObject.transform;
-				uiTestSlider.value            = 0.5f;
-				uiTestSlider.gameObject.AddComponent<BoxCollider>();
-				uiTestSlider.transform.localPosition = new Vector3(100f, 0f, 0f);
+                uiTestSlider.backgroundWidget = uiTestSliderRail;
+                uiTestSlider.foregroundWidget = uiTestSliderBar;
+                uiTestSlider.thumb            = uiTestSliderThumb.gameObject.transform;
+                uiTestSlider.value            = 0.5f;
+                uiTestSlider.gameObject.AddComponent<BoxCollider>();
+                uiTestSlider.transform.localPosition = new Vector3(100f, 0f, 0f);
 
-				NGUITools.UpdateWidgetCollider(uiTestSlider.gameObject);
-				NGUITools.UpdateWidgetCollider(uiTestSliderThumb.gameObject);
+                NGUITools.UpdateWidgetCollider(uiTestSlider.gameObject);
+                NGUITools.UpdateWidgetCollider(uiTestSliderThumb.gameObject);
 
-				// スライダーラベル作成
-				UILabel uiTestSliderLabel = NGUITools.AddChild<UILabel>(goTestSliderUnit);
-				uiTestSliderLabel.name           = "Label";
-				uiTestSliderLabel.trueTypeFont   = font;
-				uiTestSliderLabel.fontSize       = 20;
-				uiTestSliderLabel.text           = "テストスライダー";
-				uiTestSliderLabel.width          = 110;
-				uiTestSliderLabel.overflowMethod = UILabel.Overflow.ShrinkContent;
+                // スライダーラベル作成
+                UILabel uiTestSliderLabel = NGUITools.AddChild<UILabel>(goTestSliderUnit);
+                uiTestSliderLabel.name           = "Label";
+                uiTestSliderLabel.trueTypeFont   = font;
+                uiTestSliderLabel.fontSize       = 20;
+                uiTestSliderLabel.text           = "テストスライダー";
+                uiTestSliderLabel.width          = 110;
+                uiTestSliderLabel.overflowMethod = UILabel.Overflow.ShrinkContent;
 
-				uiTestSliderLabel.transform.localPosition = new Vector3(-190f, 0f, 0f);
-				
-				// 値ラベル・インプット作成
-				UISprite uiTestSliderValueBase = NGUITools.AddChild<UISprite>(goTestSliderUnit);
-				uiTestSliderValueBase.name       = "ValueBase";
-				uiTestSliderValueBase.atlas      = uiAtlasSceneEdit;
-				uiTestSliderValueBase.spriteName = "cm3d2_edit_slidernumberframe";
-				uiTestSliderValueBase.type       = UIBasicSprite.Type.Sliced;
-				uiTestSliderValueBase.SetDimensions(80, 35);
-				uiTestSliderValueBase.transform.localPosition = new Vector3(-90f, 0f, 0f);
+                uiTestSliderLabel.transform.localPosition = new Vector3(-190f, 0f, 0f);
+                
+                // 値ラベル・インプット作成
+                UISprite uiTestSliderValueBase = NGUITools.AddChild<UISprite>(goTestSliderUnit);
+                uiTestSliderValueBase.name       = "ValueBase";
+                uiTestSliderValueBase.atlas      = uiAtlasSceneEdit;
+                uiTestSliderValueBase.spriteName = "cm3d2_edit_slidernumberframe";
+                uiTestSliderValueBase.type       = UIBasicSprite.Type.Sliced;
+                uiTestSliderValueBase.SetDimensions(80, 35);
+                uiTestSliderValueBase.transform.localPosition = new Vector3(-90f, 0f, 0f);
 
-				UILabel uiTestSliderValueLabel = NGUITools.AddChild<UILabel>(uiTestSliderValueBase.gameObject);
-				uiTestSliderValueLabel.name         = "Value";
-				uiTestSliderValueLabel.depth        = uiTestSliderValueBase.depth + 1;
-				uiTestSliderValueLabel.width        = uiTestSliderValueBase.width;
-				uiTestSliderValueLabel.trueTypeFont = font;
-				uiTestSliderValueLabel.fontSize     = 20;
-				uiTestSliderValueLabel.text         = "0.00";
-				uiTestSliderValueLabel.color        = Color.black;
+                UILabel uiTestSliderValueLabel = NGUITools.AddChild<UILabel>(uiTestSliderValueBase.gameObject);
+                uiTestSliderValueLabel.name         = "Value";
+                uiTestSliderValueLabel.depth        = uiTestSliderValueBase.depth + 1;
+                uiTestSliderValueLabel.width        = uiTestSliderValueBase.width;
+                uiTestSliderValueLabel.trueTypeFont = font;
+                uiTestSliderValueLabel.fontSize     = 20;
+                uiTestSliderValueLabel.text         = "0.00";
+                uiTestSliderValueLabel.color        = Color.black;
 
-	            UIInput uiTestSliderValueInput = uiTestSliderValueLabel.gameObject.AddComponent<UIInput>();
-	            uiTestSliderValueInput.label           = uiTestSliderValueLabel;
-	            uiTestSliderValueInput.onReturnKey     = UIInput.OnReturnKey.Submit;
-	            uiTestSliderValueInput.validation      = UIInput.Validation.Float;
-				uiTestSliderValueInput.activeTextColor = Color.black;
-				uiTestSliderValueInput.caretColor      = new Color(0.1f, 0.1f, 0.3f, 1f);
-				uiTestSliderValueInput.selectionColor  = new Color(0.3f, 0.3f, 0.6f, 0.8f);
-				//EventDelegate.Add(uiTestSliderValueInput.onSubmit, new EventDelegate.Callback(this.OnSubmitSliderValueInput));
-				
-				uiTestSliderValueInput.gameObject.AddComponent<BoxCollider>();
-				NGUITools.UpdateWidgetCollider(uiTestSliderValueInput.gameObject);
-			}
-			goTestSliderUnit.SetActive(false);
+                UIInput uiTestSliderValueInput = uiTestSliderValueLabel.gameObject.AddComponent<UIInput>();
+                uiTestSliderValueInput.label           = uiTestSliderValueLabel;
+                uiTestSliderValueInput.onReturnKey     = UIInput.OnReturnKey.Submit;
+                uiTestSliderValueInput.validation      = UIInput.Validation.Float;
+                uiTestSliderValueInput.activeTextColor = Color.black;
+                uiTestSliderValueInput.caretColor      = new Color(0.1f, 0.1f, 0.3f, 1f);
+                uiTestSliderValueInput.selectionColor  = new Color(0.3f, 0.3f, 0.6f, 0.8f);
+                //EventDelegate.Add(uiTestSliderValueInput.onSubmit, new EventDelegate.Callback(this.OnSubmitSliderValueInput));
+                
+                uiTestSliderValueInput.gameObject.AddComponent<BoxCollider>();
+                NGUITools.UpdateWidgetCollider(uiTestSliderValueInput.gameObject);
+            }
+            goTestSliderUnit.SetActive(false);
 
-			#endregion
-			
+            #endregion
+            
 
             // ボタンはgoProfileTabをコピー
             GameObject goProfileTabCopy = UnityEngine.Object.Instantiate( FindChild(goUIRoot.transform.Find("ProfilePanel").Find("Comment").gameObject, "ProfileTab") ) as GameObject;
             EventDelegate.Remove(goProfileTabCopy.GetComponent<UIButton>().onClick, new EventDelegate.Callback(ProfileMgr.Instance.ChangeCommentTab));
-			goProfileTabCopy.SetActive(false);
+            goProfileTabCopy.SetActive(false);
 
 
-			#region createPanel
-			
-			// ModsSliderPanel作成
+            #region createPanel
+            
+            // ModsSliderPanel作成
             Vector3 originAMSPanel = new Vector3(UIRootWidth / 2f - 15f - ScrollViewWidth / 2f - 50f, 40f, 0f);
             int systemUnitHeight = 30;
 
-			// 親Panel
+            // 親Panel
             uiAMSPanel = NGUITools.AddChild<UIPanel>(goUIRoot);
             uiAMSPanel.name = "ModsSliderPanel";
             uiAMSPanel.transform.localPosition = originAMSPanel;
             goAMSPanel = uiAMSPanel.gameObject;
 
-			// 背景
+            // 背景
             UISprite uiBGSprite = NGUITools.AddChild<UISprite>(goAMSPanel);
             uiBGSprite.name       = "BG";
-			uiBGSprite.atlas      = uiAtlasSceneEdit;
-			uiBGSprite.spriteName = "cm3d2_edit_window_l";
-			uiBGSprite.type       = UIBasicSprite.Type.Sliced;
-			uiBGSprite.SetDimensions(ScrollViewWidth, ScrollViewHeight);
+            uiBGSprite.atlas      = uiAtlasSceneEdit;
+            uiBGSprite.spriteName = "cm3d2_edit_window_l";
+            uiBGSprite.type       = UIBasicSprite.Type.Sliced;
+            uiBGSprite.SetDimensions(ScrollViewWidth, ScrollViewHeight);
 
-			// ScrollViewPanel
+            // ScrollViewPanel
             uiScrollPanel = NGUITools.AddChild<UIPanel>(goAMSPanel);
             uiScrollPanel.name         = "ScrollView";
             uiScrollPanel.sortingOrder = uiAMSPanel.sortingOrder + 1;
             uiScrollPanel.clipping     = UIDrawCall.Clipping.SoftClip;
             uiScrollPanel.SetRect(0f, 0f, uiBGSprite.width, uiBGSprite.height - 110 - systemUnitHeight);
-			uiScrollPanel.transform.localPosition = new Vector3(-25f, - systemUnitHeight, 0f);
+            uiScrollPanel.transform.localPosition = new Vector3(-25f, - systemUnitHeight, 0f);
             goScrollView = uiScrollPanel.gameObject;
 
             uiScrollView = goScrollView.AddComponent<UIScrollView>();
@@ -585,34 +585,34 @@ namespace CM3D2.AddModsSlider.Plugin
             NGUITools.UpdateWidgetCollider(uiBGSprite.gameObject);
             
             // ScrollBar
-			uiScrollBar = NGUITools.AddChild<UIScrollBar>(goAMSPanel);
-			uiScrollBar.value = 0f;
-			uiScrollBar.gameObject.AddComponent<BoxCollider>();
-			uiScrollBar.transform.localPosition = new Vector3(uiBGSprite.width / 2f-10, 0f, 0f);
-			uiScrollBar.transform.localRotation *= Quaternion.Euler(0f, 0f, -90f);
+            uiScrollBar = NGUITools.AddChild<UIScrollBar>(goAMSPanel);
+            uiScrollBar.value = 0f;
+            uiScrollBar.gameObject.AddComponent<BoxCollider>();
+            uiScrollBar.transform.localPosition = new Vector3(uiBGSprite.width / 2f-10, 0f, 0f);
+            uiScrollBar.transform.localRotation *= Quaternion.Euler(0f, 0f, -90f);
 
-			UIWidget uiScrollBarFore = NGUITools.AddChild<UIWidget>(uiScrollBar.gameObject);
-			uiScrollBarFore.name   = "DummyFore";
-			uiScrollBarFore.height = 15;
-			uiScrollBarFore.width  = uiBGSprite.height;
+            UIWidget uiScrollBarFore = NGUITools.AddChild<UIWidget>(uiScrollBar.gameObject);
+            uiScrollBarFore.name   = "DummyFore";
+            uiScrollBarFore.height = 15;
+            uiScrollBarFore.width  = uiBGSprite.height;
 
-			UISprite uiScrollBarThumb = NGUITools.AddChild<UISprite>(uiScrollBar.gameObject);
-			uiScrollBarThumb.name       = "Thumb";
-			uiScrollBarThumb.depth      = uiBGSprite.depth + 1;
-			uiScrollBarThumb.atlas      = uiAtlasSceneEdit;
-			uiScrollBarThumb.spriteName = "cm3d2_edit_slidercursor";
-			uiScrollBarThumb.type       = UIBasicSprite.Type.Sliced;
-			uiScrollBarThumb.SetDimensions(15, 15);
-			uiScrollBarThumb.gameObject.AddComponent<BoxCollider>();
+            UISprite uiScrollBarThumb = NGUITools.AddChild<UISprite>(uiScrollBar.gameObject);
+            uiScrollBarThumb.name       = "Thumb";
+            uiScrollBarThumb.depth      = uiBGSprite.depth + 1;
+            uiScrollBarThumb.atlas      = uiAtlasSceneEdit;
+            uiScrollBarThumb.spriteName = "cm3d2_edit_slidercursor";
+            uiScrollBarThumb.type       = UIBasicSprite.Type.Sliced;
+            uiScrollBarThumb.SetDimensions(15, 15);
+            uiScrollBarThumb.gameObject.AddComponent<BoxCollider>();
 
-			uiScrollBar.foregroundWidget = uiScrollBarFore;
-			uiScrollBar.thumb            = uiScrollBarThumb.transform;
+            uiScrollBar.foregroundWidget = uiScrollBarFore;
+            uiScrollBar.thumb            = uiScrollBarThumb.transform;
 
-			NGUITools.UpdateWidgetCollider(uiScrollBarFore.gameObject);
-			NGUITools.UpdateWidgetCollider(uiScrollBarThumb.gameObject);
+            NGUITools.UpdateWidgetCollider(uiScrollBarFore.gameObject);
+            NGUITools.UpdateWidgetCollider(uiScrollBarThumb.gameObject);
             uiScrollView.verticalScrollBar = uiScrollBar;
 
-			// ScrollView内のTable
+            // ScrollView内のTable
             uiTable = NGUITools.AddChild<UITable>(goScrollView);
             uiTable.pivot           = UIWidget.Pivot.Center;
             uiTable.columns         = 1;
@@ -626,85 +626,85 @@ namespace CM3D2.AddModsSlider.Plugin
             //uiScrollView.centerOnChild = goScrollViewTable.AddComponent<UICenterOnChild>();
 
             // ドラッグ用タブ（タイトル部分）
-			UISprite uiSpriteTitleTab = NGUITools.AddChild<UISprite>(goAMSPanel);
+            UISprite uiSpriteTitleTab = NGUITools.AddChild<UISprite>(goAMSPanel);
             uiSpriteTitleTab.name       = "TitleTab";
             uiSpriteTitleTab.depth      = uiBGSprite.depth - 1;
-			uiSpriteTitleTab.atlas      = uiAtlasDialog;
-			uiSpriteTitleTab.spriteName = "cm3d2_dialog_frame";
-			uiSpriteTitleTab.type       = UIBasicSprite.Type.Sliced;
-			uiSpriteTitleTab.SetDimensions(300, 80);
+            uiSpriteTitleTab.atlas      = uiAtlasDialog;
+            uiSpriteTitleTab.spriteName = "cm3d2_dialog_frame";
+            uiSpriteTitleTab.type       = UIBasicSprite.Type.Sliced;
+            uiSpriteTitleTab.SetDimensions(300, 80);
             uiSpriteTitleTab.autoResizeBoxCollider = true;
             uiSpriteTitleTab.gameObject.AddComponent<UIDragObject>().target = goAMSPanel.transform;
             uiSpriteTitleTab.gameObject.AddComponent<BoxCollider>().isTrigger = true;
             NGUITools.UpdateWidgetCollider(uiSpriteTitleTab.gameObject);
             uiSpriteTitleTab.transform.localPosition = new Vector3(uiBGSprite.width / 2f + 5f, (uiBGSprite.height - uiSpriteTitleTab.width) / 2f, 0f);
-			uiSpriteTitleTab.transform.localRotation *= Quaternion.Euler(0f, 0f, -90f);
+            uiSpriteTitleTab.transform.localRotation *= Quaternion.Euler(0f, 0f, -90f);
             
             UILabel uiLabelTitleTab = uiSpriteTitleTab.gameObject.AddComponent<UILabel>();
-			uiLabelTitleTab.depth        = uiSpriteTitleTab.depth + 1;
-			uiLabelTitleTab.width        = uiSpriteTitleTab.width;
-			uiLabelTitleTab.color        = Color.white;
-			uiLabelTitleTab.trueTypeFont = font;
-			uiLabelTitleTab.fontSize     = 18;
-			uiLabelTitleTab.text         = "Mods Slider " + AddModsSlider.Version;
+            uiLabelTitleTab.depth        = uiSpriteTitleTab.depth + 1;
+            uiLabelTitleTab.width        = uiSpriteTitleTab.width;
+            uiLabelTitleTab.color        = Color.white;
+            uiLabelTitleTab.trueTypeFont = font;
+            uiLabelTitleTab.fontSize     = 18;
+            uiLabelTitleTab.text         = "Mods Slider " + AddModsSlider.Version;
 
-			int conWidth = (int)(uiBGSprite.width - uiTable.padding.x * 2);
-			int baseTop  = (int)(uiBGSprite.height / 2f - 50);
+            int conWidth = (int)(uiBGSprite.width - uiTable.padding.x * 2);
+            int baseTop  = (int)(uiBGSprite.height / 2f - 50);
 
-			GameObject goSystemUnit = NGUITools.AddChild(goAMSPanel);
-			goSystemUnit.name = ("System:Undo");
+            GameObject goSystemUnit = NGUITools.AddChild(goAMSPanel);
+            goSystemUnit.name = ("System:Undo");
 
-			// Undoボタン
+            // Undoボタン
             GameObject goUndoAll = SetCloneChild(goSystemUnit, goProfileTabCopy, "UndoAll");
             goUndoAll.transform.localPosition = new Vector3(-conWidth * 0.25f - 6, baseTop - systemUnitHeight / 2f, 0f);
-			goUndoAll.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+            goUndoAll.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
 
-			UISprite uiSpriteUndoAll = goUndoAll.GetComponent<UISprite>();
+            UISprite uiSpriteUndoAll = goUndoAll.GetComponent<UISprite>();
             uiSpriteUndoAll.SetDimensions((int)(conWidth * 0.5f) - 2, systemUnitHeight); 
 
-			UILabel uiLabelUndoAll = FindChild(goUndoAll,"Name").GetComponent<UILabel>();
-			uiLabelUndoAll.width           = uiSpriteUndoAll.width  - 10;
-			uiLabelUndoAll.fontSize        = 22;
-			uiLabelUndoAll.spacingX        = 0;
-			uiLabelUndoAll.supportEncoding = true; 
-			uiLabelUndoAll.text            = "[111111]UndoAll";
+            UILabel uiLabelUndoAll = FindChild(goUndoAll,"Name").GetComponent<UILabel>();
+            uiLabelUndoAll.width           = uiSpriteUndoAll.width  - 10;
+            uiLabelUndoAll.fontSize        = 22;
+            uiLabelUndoAll.spacingX        = 0;
+            uiLabelUndoAll.supportEncoding = true; 
+            uiLabelUndoAll.text            = "[111111]UndoAll";
 
-			UIButton uiButtonUndoAll = goUndoAll.GetComponent<UIButton>();
-			uiButtonUndoAll.defaultColor = new Color(1f, 1f, 1f, 0.8f);
+            UIButton uiButtonUndoAll = goUndoAll.GetComponent<UIButton>();
+            uiButtonUndoAll.defaultColor = new Color(1f, 1f, 1f, 0.8f);
             EventDelegate.Set(uiButtonUndoAll.onClick, new EventDelegate.Callback(this.OnClickUndoAll));
 
-			FindChild(goUndoAll,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
-			FindChild(goUndoAll,"SelectCursor").SetActive(false);
-	        NGUITools.UpdateWidgetCollider(goUndoAll);
-	        goUndoAll.SetActive(true);
+            FindChild(goUndoAll,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
+            FindChild(goUndoAll,"SelectCursor").SetActive(false);
+            NGUITools.UpdateWidgetCollider(goUndoAll);
+            goUndoAll.SetActive(true);
 
-			// Resetボタン
-	        GameObject goResetAll = SetCloneChild(goSystemUnit, goUndoAll, "ResetAll");
-	        goResetAll.transform.localPosition = new Vector3(conWidth * 0.25f - 4, baseTop - systemUnitHeight / 2f, 0f);
+            // Resetボタン
+            GameObject goResetAll = SetCloneChild(goSystemUnit, goUndoAll, "ResetAll");
+            goResetAll.transform.localPosition = new Vector3(conWidth * 0.25f - 4, baseTop - systemUnitHeight / 2f, 0f);
 
-			UILabel uiLabelResetAll = FindChild(goResetAll,"Name").GetComponent<UILabel>();
-			uiLabelResetAll.text = "[111111]ResetAll";
+            UILabel uiLabelResetAll = FindChild(goResetAll,"Name").GetComponent<UILabel>();
+            uiLabelResetAll.text = "[111111]ResetAll";
 
-			UIButton uiButtonResetAll = goResetAll.GetComponent<UIButton>();
-			uiButtonResetAll.defaultColor = new Color(1f, 1f, 1f, 0.8f);
+            UIButton uiButtonResetAll = goResetAll.GetComponent<UIButton>();
+            uiButtonResetAll.defaultColor = new Color(1f, 1f, 1f, 0.8f);
             EventDelegate.Set(uiButtonResetAll.onClick, new EventDelegate.Callback(this.OnClickResetAll));
 
-	        NGUITools.UpdateWidgetCollider(goResetAll);
-	        goResetAll.SetActive(true);
+            NGUITools.UpdateWidgetCollider(goResetAll);
+            goResetAll.SetActive(true);
 
             #endregion
 
 
 
             // 拡張セーブデータ読込
-			Debug.Log(LogLabel +"Loading ExternalSaveData...");
-			Debug.Log("----------------ExternalSaveData----------------");
+            Debug.Log(LogLabel +"Loading ExternalSaveData...");
+            Debug.Log("----------------ExternalSaveData----------------");
             getExSaveData();
-			Debug.Log("------------------------------------------------");
+            Debug.Log("------------------------------------------------");
 
 
 
-			#region addTableContents
+            #region addTableContents
 
             // ModsParamの設定に従ってボタン・スライダー追加
             for (int i = 0; i < mp.KeyCount; i++)
@@ -716,96 +716,96 @@ namespace CM3D2.AddModsSlider.Plugin
                 uiValueLable[key]  = new Dictionary<string, UILabel>();
                 string modeDesc = mp.sDescription[key] + " (" + key + ")";
 
-				// ModUnit：modタグ単位のまとめオブジェクト ScrollViewGridの子
-				GameObject goModUnit = NGUITools.AddChild(goScrollViewTable);
-				goModUnit.name = ("Unit:" + key);
-				trModUnit[key] = goModUnit.transform;
+                // ModUnit：modタグ単位のまとめオブジェクト ScrollViewGridの子
+                GameObject goModUnit = NGUITools.AddChild(goScrollViewTable);
+                goModUnit.name = ("Unit:" + key);
+                trModUnit[key] = goModUnit.transform;
 
-				// プロフィールタブ複製・追加
-				GameObject goHeaderButton = SetCloneChild(goModUnit, goProfileTabCopy, "Header:"+ key);
-				goHeaderButton.SetActive(true);
+                // プロフィールタブ複製・追加
+                GameObject goHeaderButton = SetCloneChild(goModUnit, goProfileTabCopy, "Header:"+ key);
+                goHeaderButton.SetActive(true);
                 goHeaderButton.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
-				UIButton uiHeaderButton = goHeaderButton.GetComponent<UIButton>();
+                UIButton uiHeaderButton = goHeaderButton.GetComponent<UIButton>();
                 EventDelegate.Set(uiHeaderButton.onClick, new EventDelegate.Callback(this.OnClickHeaderButton));
                 setButtonColor(uiHeaderButton,  mp.IsToggle(key) ?  mp.bEnabled[key] : false );
 
-				// 白地Sprite
-				UISprite uiSpriteHeaderButton = goHeaderButton.GetComponent<UISprite>();
-				uiSpriteHeaderButton.type = UIBasicSprite.Type.Sliced;
+                // 白地Sprite
+                UISprite uiSpriteHeaderButton = goHeaderButton.GetComponent<UISprite>();
+                uiSpriteHeaderButton.type = UIBasicSprite.Type.Sliced;
                 uiSpriteHeaderButton.SetDimensions(conWidth, 40); 
 
                 UILabel uiLabelHeader = FindChild(goHeaderButton, "Name").GetComponent<UILabel>();
                 uiLabelHeader.width          = uiSpriteHeaderButton.width - 20; 
                 uiLabelHeader.height         = 30; 
-				uiLabelHeader.trueTypeFont   = font;
-				uiLabelHeader.fontSize       = 22;
-				uiLabelHeader.spacingX       = 0;
-				uiLabelHeader.multiLine      = false;
-				uiLabelHeader.overflowMethod = UILabel.Overflow.ClampContent;
-				uiLabelHeader.supportEncoding= true; 
-				uiLabelHeader.text           = "[000000]"+ modeDesc +"[-]";
+                uiLabelHeader.trueTypeFont   = font;
+                uiLabelHeader.fontSize       = 22;
+                uiLabelHeader.spacingX       = 0;
+                uiLabelHeader.multiLine      = false;
+                uiLabelHeader.overflowMethod = UILabel.Overflow.ClampContent;
+                uiLabelHeader.supportEncoding= true; 
+                uiLabelHeader.text           = "[000000]"+ modeDesc +"[-]";
                 uiLabelHeader.gameObject.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
 
                 // 金枠Sprite
-				UISprite uiSpriteHeaderCursor =  FindChild(goHeaderButton,"SelectCursor").GetComponent<UISprite>();
-				uiSpriteHeaderCursor.gameObject.SetActive( mp.IsToggle(key) ?  mp.bEnabled[key] : false );
+                UISprite uiSpriteHeaderCursor =  FindChild(goHeaderButton,"SelectCursor").GetComponent<UISprite>();
+                uiSpriteHeaderCursor.gameObject.SetActive( mp.IsToggle(key) ?  mp.bEnabled[key] : false );
 
                 NGUITools.UpdateWidgetCollider(goHeaderButton);
                 
                 // スライダーならUndo/Resetボタンとスライダー追加
                 if (mp.IsSlider(key))
-				{
-	                uiSpriteHeaderButton.SetDimensions((int)(conWidth*0.8f), 40); 
-	                uiLabelHeader.width = uiSpriteHeaderButton.width - 20; 
-		            uiHeaderButton.transform.localPosition = new Vector3(-conWidth*0.1f, 0f, 0f);
+                {
+                    uiSpriteHeaderButton.SetDimensions((int)(conWidth*0.8f), 40); 
+                    uiLabelHeader.width = uiSpriteHeaderButton.width - 20; 
+                    uiHeaderButton.transform.localPosition = new Vector3(-conWidth*0.1f, 0f, 0f);
 
-					// Undoボタン
-	                GameObject goUndo = SetCloneChild(goModUnit, goProfileTabCopy, "Undo:" + key);
-		            goUndo.transform.localPosition = new Vector3(conWidth*0.4f+2, 10.5f, 0f);
-					goUndo.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                    // Undoボタン
+                    GameObject goUndo = SetCloneChild(goModUnit, goProfileTabCopy, "Undo:" + key);
+                    goUndo.transform.localPosition = new Vector3(conWidth*0.4f+2, 10.5f, 0f);
+                    goUndo.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
 
-					UISprite uiSpriteUndo = goUndo.GetComponent<UISprite>();
-		            uiSpriteUndo.SetDimensions((int)(conWidth*0.2f)-2, 19); 
+                    UISprite uiSpriteUndo = goUndo.GetComponent<UISprite>();
+                    uiSpriteUndo.SetDimensions((int)(conWidth*0.2f)-2, 19); 
 
-					UILabel uiLabelUndo = FindChild(goUndo,"Name").GetComponent<UILabel>();
-					uiLabelUndo.width           = uiSpriteUndo.width  - 10;
-					uiLabelUndo.fontSize        = 14;
-					uiLabelUndo.spacingX        = 0;
-					uiLabelUndo.supportEncoding = true; 
-					uiLabelUndo.text            = "[111111]Undo";
-					
-					UIButton uiButtonUndo = goUndo.GetComponent<UIButton>();
-            		uiButtonUndo.defaultColor = new Color(1f, 1f, 1f, 0.8f);
-					
+                    UILabel uiLabelUndo = FindChild(goUndo,"Name").GetComponent<UILabel>();
+                    uiLabelUndo.width           = uiSpriteUndo.width  - 10;
+                    uiLabelUndo.fontSize        = 14;
+                    uiLabelUndo.spacingX        = 0;
+                    uiLabelUndo.supportEncoding = true; 
+                    uiLabelUndo.text            = "[111111]Undo";
+                    
+                    UIButton uiButtonUndo = goUndo.GetComponent<UIButton>();
+                    uiButtonUndo.defaultColor = new Color(1f, 1f, 1f, 0.8f);
+                    
                     EventDelegate.Set(uiButtonUndo.onClick, new EventDelegate.Callback(this.OnClickUndoButton));
-					FindChild(goUndo,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
-					FindChild(goUndo,"SelectCursor").SetActive(false);
-	                NGUITools.UpdateWidgetCollider(goUndo);
-	                goUndo.SetActive(true);
+                    FindChild(goUndo,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
+                    FindChild(goUndo,"SelectCursor").SetActive(false);
+                    NGUITools.UpdateWidgetCollider(goUndo);
+                    goUndo.SetActive(true);
 
-					// Resetボタン
-	                GameObject goReset = SetCloneChild(goModUnit, goProfileTabCopy, "Reset:" + key);
-					goReset.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
-		            goReset.transform.localPosition = new Vector3(conWidth*0.4f+2, -10.5f, 0f);
+                    // Resetボタン
+                    GameObject goReset = SetCloneChild(goModUnit, goProfileTabCopy, "Reset:" + key);
+                    goReset.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                    goReset.transform.localPosition = new Vector3(conWidth*0.4f+2, -10.5f, 0f);
 
-					UISprite uiSpriteReset = goReset.GetComponent<UISprite>();
-		            uiSpriteReset.SetDimensions((int)(conWidth*0.2f)-2, 19); 
+                    UISprite uiSpriteReset = goReset.GetComponent<UISprite>();
+                    uiSpriteReset.SetDimensions((int)(conWidth*0.2f)-2, 19); 
 
-					UILabel uiLabelReset = FindChild(goReset,"Name").GetComponent<UILabel>();
-					uiLabelReset.width           = uiSpriteReset.width - 10;
-					uiLabelReset.fontSize        = 14;
-					uiLabelReset.spacingX        = 0;
-					uiLabelReset.supportEncoding = true; 
-					uiLabelReset.text            = "[111111]Reset";
-					
-					UIButton uiButtonReset = goReset.GetComponent<UIButton>();
-            		uiButtonReset.defaultColor = new Color(1f, 1f, 1f, 0.8f);
-					
+                    UILabel uiLabelReset = FindChild(goReset,"Name").GetComponent<UILabel>();
+                    uiLabelReset.width           = uiSpriteReset.width - 10;
+                    uiLabelReset.fontSize        = 14;
+                    uiLabelReset.spacingX        = 0;
+                    uiLabelReset.supportEncoding = true; 
+                    uiLabelReset.text            = "[111111]Reset";
+                    
+                    UIButton uiButtonReset = goReset.GetComponent<UIButton>();
+                    uiButtonReset.defaultColor = new Color(1f, 1f, 1f, 0.8f);
+                    
                     EventDelegate.Set(uiButtonReset.onClick, new EventDelegate.Callback(this.OnClickResetButton));
-					FindChild(goReset,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
-					FindChild(goReset,"SelectCursor").SetActive(false);
-	                NGUITools.UpdateWidgetCollider(goReset);
-	                goReset.SetActive(true);
+                    FindChild(goReset,"SelectCursor").GetComponent<UISprite>().SetDimensions(16,16);
+                    FindChild(goReset,"SelectCursor").SetActive(false);
+                    NGUITools.UpdateWidgetCollider(goReset);
+                    goReset.SetActive(true);
 
 
                     for (int j=0; j<mp.ValCount(key); j++)
@@ -820,15 +820,15 @@ namespace CM3D2.AddModsSlider.Plugin
                         string label = mp.sLabel[key][prop];
                         string vType = mp.sVType[key][prop];
 
-						// スライダーをModUnitに追加
-						GameObject goSliderUnit = SetCloneChild(goModUnit, goTestSliderUnit, "SliderUnit");
-			            goSliderUnit.transform.localPosition = new Vector3(0f, j * - 70f - uiSpriteHeaderButton.height-20f, 0f);
-						goSliderUnit.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                        // スライダーをModUnitに追加
+                        GameObject goSliderUnit = SetCloneChild(goModUnit, goTestSliderUnit, "SliderUnit");
+                        goSliderUnit.transform.localPosition = new Vector3(0f, j * - 70f - uiSpriteHeaderButton.height-20f, 0f);
+                        goSliderUnit.AddComponent<UIDragScrollView>().scrollView = uiScrollView;
 
-						// フレームサイズ
-						goSliderUnit.GetComponent<UISprite>().SetDimensions(conWidth, 50);
+                        // フレームサイズ
+                        goSliderUnit.GetComponent<UISprite>().SetDimensions(conWidth, 50);
 
-						// スライダー設定
+                        // スライダー設定
                         UISlider uiModSlider = FindChild(goSliderUnit,"Slider").GetComponent<UISlider>();
                         uiModSlider.name = "Slider:"+ key +":"+ prop;
                         uiModSlider.value = codecSliderValue(key, prop);
@@ -837,13 +837,13 @@ namespace CM3D2.AddModsSlider.Plugin
 
                         // スライダーラベル設定
                         FindChild(goSliderUnit,"Label").GetComponent<UILabel>().text = label;
-						FindChild(goSliderUnit,"Label").AddComponent<UIDragScrollView>().scrollView = uiScrollView;
+                        FindChild(goSliderUnit,"Label").AddComponent<UIDragScrollView>().scrollView = uiScrollView;
 
                         // スライダー値ラベル参照取得
                         GameObject goValueLabel = FindChild(goSliderUnit,"Value");
                         goValueLabel.name = "Value:"+ key +":"+ prop;
                         uiValueLable[key][prop] = goValueLabel.GetComponent<UILabel>();
-						uiValueLable[key][prop].multiLine      = false;
+                        uiValueLable[key][prop].multiLine      = false;
                         EventDelegate.Set(goValueLabel.GetComponent<UIInput>().onSubmit, this.OnSubmitSliderValueInput);
 
                         // スライダー有効状態設定
@@ -853,11 +853,11 @@ namespace CM3D2.AddModsSlider.Plugin
                 }
 
                 // 金枠Sprite
-				uiSpriteHeaderCursor.type = UIBasicSprite.Type.Sliced;
+                uiSpriteHeaderCursor.type = UIBasicSprite.Type.Sliced;
                 uiSpriteHeaderCursor.SetDimensions(uiSpriteHeaderButton.width - 4, uiSpriteHeaderButton.height - 4); 
             }
 
-			#endregion
+            #endregion
 
             uiTable.Reposition();
             goAMSPanel.SetActive(false);
@@ -866,24 +866,24 @@ namespace CM3D2.AddModsSlider.Plugin
 
           } catch(Exception ex) { Debug.Log(LogLabel +"initialize()"+ ex); return false;}
 
-			return true;
-		}
-		
-		private void finalize()
-		{
-			bInitCompleted = false;
-			visible        = false;
-			mp             = null;
+            return true;
+        }
+        
+        private void finalize()
+        {
+            bInitCompleted = false;
+            visible        = false;
+            mp             = null;
 
-			maid              = null;
-			goAMSPanel        = null;
-			goScrollView      = null;
-			goScrollViewTable = null;
-			
-			uiValueLable.Clear();
-		}
-		
-		//----
+            maid              = null;
+            goAMSPanel        = null;
+            goScrollView      = null;
+            goScrollViewTable = null;
+            
+            uiValueLable.Clear();
+        }
+        
+        //----
 
         public void toggleActiveOnWideSlider() { toggleActiveOnWideSlider(mp.bEnabled["WIDESLIDER"]); }
         public void toggleActiveOnWideSlider(bool b)
@@ -892,30 +892,30 @@ namespace CM3D2.AddModsSlider.Plugin
 
             foreach (Transform t in goScrollViewTable.transform)
             {
-				string goType = getTag(t, 0);
-				string goKey  = getTag(t, 1);
-				
-				if (goType == "System") continue;
-				
-				if (mp.bOnWideSlider[goKey])
-				{
-					string s = (b ? "[000000]" : "[FF0000]WS必須 [-]") + mp.sDescription[goKey] + " (" + goKey + ")";
-					t.GetComponentsInChildren<UILabel>()[0].text = s;
-					
-					UIButton uiButton = t.GetComponentsInChildren<UIButton>()[0];
-					uiButton.isEnabled = b;
-					if (!(b && mp.IsSlider(goKey))) setButtonColor(uiButton, b);
+                string goType = getTag(t, 0);
+                string goKey  = getTag(t, 1);
+                
+                if (goType == "System") continue;
+                
+                if (mp.bOnWideSlider[goKey])
+                {
+                    string s = (b ? "[000000]" : "[FF0000]WS必須 [-]") + mp.sDescription[goKey] + " (" + goKey + ")";
+                    t.GetComponentsInChildren<UILabel>()[0].text = s;
+                    
+                    UIButton uiButton = t.GetComponentsInChildren<UIButton>()[0];
+                    uiButton.isEnabled = b;
+                    if (!(b && mp.IsSlider(goKey))) setButtonColor(uiButton, b);
 
-		            if (!b)
-		            {
-						foreach (Transform tc in t)
-			            {
-							string gocType = getTag(tc, 0);
-							if (gocType == "SliderUnit" || gocType == "Spacer") tc.gameObject.SetActive(b);
-						}
-					}
-				}
-			}
+                    if (!b)
+                    {
+                        foreach (Transform tc in t)
+                        {
+                            string gocType = getTag(tc, 0);
+                            if (gocType == "SliderUnit" || gocType == "Spacer") tc.gameObject.SetActive(b);
+                        }
+                    }
+                }
+            }
             uiTable.repositionNow = true;
 
           } catch(Exception ex) { Debug.Log(LogLabel +"toggleActiveOnWideSlider() "+ ex); }
@@ -924,39 +924,39 @@ namespace CM3D2.AddModsSlider.Plugin
         private void undoSliderValue(string key)
         {
           try{
-			foreach (Transform tr in trModUnit[key])
-			{
-				if (tr.name == "SliderUnit")
-				{
-					UISlider slider = FindChildByTag(tr, "Slider").GetComponent<UISlider>();
-					string prop = getTag(slider, 2);
+            foreach (Transform tr in trModUnit[key])
+            {
+                if (tr.name == "SliderUnit")
+                {
+                    UISlider slider = FindChildByTag(tr, "Slider").GetComponent<UISlider>();
+                    string prop = getTag(slider, 2);
 
-					mp.fValue[key][prop] = undoValue[key][prop];
-					slider.value = codecSliderValue(key, prop);
-					//Debug.LogWarning(key + "#"+ getTag(slider, 2) +" = "+ undoValue[key][prop]);
-				}
-			}
+                    mp.fValue[key][prop] = undoValue[key][prop];
+                    slider.value = codecSliderValue(key, prop);
+                    //Debug.LogWarning(key + "#"+ getTag(slider, 2) +" = "+ undoValue[key][prop]);
+                }
+            }
           } catch(Exception ex) { Debug.Log(LogLabel +"undoSliderValue() "+ ex); }
         }
         
         private void resetSliderValue(string key)
         {
           try{
-			foreach (Transform tr in trModUnit[key])
-			{
-				if (tr.name == "SliderUnit")
-				{
-					UISlider slider = FindChildByTag(tr, "Slider").GetComponent<UISlider>();
-					string prop = getTag(slider, 2);
-					
-					mp.fValue[key][prop] = mp.fVdef[key][prop];
-					slider.value = codecSliderValue(key, prop);
+            foreach (Transform tr in trModUnit[key])
+            {
+                if (tr.name == "SliderUnit")
+                {
+                    UISlider slider = FindChildByTag(tr, "Slider").GetComponent<UISlider>();
+                    string prop = getTag(slider, 2);
+                    
+                    mp.fValue[key][prop] = mp.fVdef[key][prop];
+                    slider.value = codecSliderValue(key, prop);
 
-					//Debug.LogWarning(key + "#"+ getTag(slider, 2) +" = "+ mp.fVdef[key][prop]);
-				}
-			}
+                    //Debug.LogWarning(key + "#"+ getTag(slider, 2) +" = "+ mp.fVdef[key][prop]);
+                }
+            }
           } catch(Exception ex) { Debug.Log(LogLabel +"resetSliderValue() "+ ex); }
-		}
+        }
         
 
         private int sortGridByXMLOrder(Transform t1, Transform t2)
@@ -972,7 +972,7 @@ namespace CM3D2.AddModsSlider.Plugin
             //Debug.Log(t1.name +" comp "+ t2.name);
 
             Dictionary<string, int> order = new Dictionary<string, int>()
-            	{ {"System", -1}, {"Unit", 0}, {"Panel", 1}, {"Header", 2}, {"Slider", 3}, {"Spacer", 4} };
+                { {"System", -1}, {"Unit", 0}, {"Panel", 1}, {"Header", 2}, {"Slider", 3}, {"Spacer", 4} };
             
             if (n == m) 
             {
@@ -993,42 +993,42 @@ namespace CM3D2.AddModsSlider.Plugin
         {
             foreach (Transform tc in trModUnit[key])
             {
-				string type = getTag(tc, 0);
-				if (type == "SliderUnit" || type == "Spacer") tc.gameObject.SetActive(b);
-			}
+                string type = getTag(tc, 0);
+                if (type == "SliderUnit" || type == "Spacer") tc.gameObject.SetActive(b);
+            }
 
-			uiTable.repositionNow = true;
+            uiTable.repositionNow = true;
         }
 
         private void setButtonColor(string key, bool b)
         {
-			setButtonColor(FindChild(trModUnit[key], "Header:"+ key).GetComponent<UIButton>(), b);
-		}
+            setButtonColor(FindChild(trModUnit[key], "Header:"+ key).GetComponent<UIButton>(), b);
+        }
         private void setButtonColor(UIButton button, bool b)
         {
             Color color = button.defaultColor;
 
-			if ( mp.IsToggle(getTag(button, 1)) )
-			{
-				button.defaultColor = new Color(color.r, color.g, color.b,  b ? 1f : 0.5f);
-				FindChild(button.gameObject, "SelectCursor").SetActive(b);
-			}
-			else
-			{
-				button.defaultColor = new Color(color.r, color.g, color.b,  b ? 1f : 0.75f);
-			}
+            if ( mp.IsToggle(getTag(button, 1)) )
+            {
+                button.defaultColor = new Color(color.r, color.g, color.b,  b ? 1f : 0.5f);
+                FindChild(button.gameObject, "SelectCursor").SetActive(b);
+            }
+            else
+            {
+                button.defaultColor = new Color(color.r, color.g, color.b,  b ? 1f : 0.75f);
+            }
         }
 
-		private void windowTweenFinished()
-		{
-			goScrollView.SetActive(true);
-		}
+        private void windowTweenFinished()
+        {
+            goScrollView.SetActive(true);
+        }
 
-		private string getTag(Component co, int n) { return getTag(co.gameObject, n); }
-		private string getTag(GameObject go, int n)
-		{
-			return (go.name.Split(':') != null) ? go.name.Split(':')[n] : "";
-		}
+        private string getTag(Component co, int n) { return getTag(co.gameObject, n); }
+        private string getTag(GameObject go, int n)
+        {
+            return (go.name.Split(':') != null) ? go.name.Split(':')[n] : "";
+        }
 
         private float codecSliderValue(string key, string prop)
         {
@@ -1211,7 +1211,7 @@ namespace CM3D2.AddModsSlider.Plugin
             } 
             
             return null;
-		}
+        }
         
 
         internal static void SetChild(GameObject parent, GameObject child)
@@ -1225,35 +1225,35 @@ namespace CM3D2.AddModsSlider.Plugin
 
         internal static GameObject SetCloneChild(GameObject parent, GameObject orignal, string name)
         {
-			GameObject clone = UnityEngine.Object.Instantiate(orignal) as GameObject;
-			if (!clone) return null;
+            GameObject clone = UnityEngine.Object.Instantiate(orignal) as GameObject;
+            if (!clone) return null;
 
-			clone.name = name;
-			SetChild(parent, clone);
+            clone.name = name;
+            SetChild(parent, clone);
 
-			return clone;
-		}
-		
-		internal static void ReleaseChild(GameObject child)
-		{
+            return clone;
+        }
+        
+        internal static void ReleaseChild(GameObject child)
+        {
             child.transform.parent = null;
             child.SetActive(false);
-		}
-		
+        }
+        
         internal static void DestoryChild(GameObject parent, string name)
         {
             GameObject child = FindChild(parent, name);
             if (child) 
             {
-				child.transform.parent = null;
-	            GameObject.Destroy(child);
-	        }
+                child.transform.parent = null;
+                GameObject.Destroy(child);
+            }
         }
 
         internal static UIAtlas FindAtlas(string s)
-		{
-			return ( (new List<UIAtlas>( Resources.FindObjectsOfTypeAll<UIAtlas>() )).FirstOrDefault(a => a.name == s)  );
-		}
+        {
+            return ( (new List<UIAtlas>( Resources.FindObjectsOfTypeAll<UIAtlas>() )).FirstOrDefault(a => a.name == s)  );
+        }
 
         internal static void WriteTrans(string s)
         {
@@ -1281,13 +1281,13 @@ namespace CM3D2.AddModsSlider.Plugin
 
         internal static void WriteChildrenComponent(GameObject go)
         {
-			WriteComponent(go);
-			
+            WriteComponent(go);
+            
             foreach (Transform tc in go.transform)
             {
                 WriteChildrenComponent(tc.gameObject);
             }
-		}
+        }
 
         internal static void WriteComponent(GameObject go)
         {
